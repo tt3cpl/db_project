@@ -1,0 +1,895 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 16.8
+-- Dumped by pg_dump version 16.8
+
+-- Started on 2025-04-24 14:33:07 MSK
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 2 (class 3079 OID 16384)
+-- Name: adminpack; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS adminpack WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 3741 (class 0 OID 0)
+-- Dependencies: 2
+-- Name: EXTENSION adminpack; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION adminpack IS 'administrative functions for PostgreSQL';
+
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 222 (class 1259 OID 16461)
+-- Name: Audience; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Audience" (
+    "ID_audience" integer NOT NULL,
+    "Type" text NOT NULL,
+    "Status" text NOT NULL,
+    "Audience_number" integer NOT NULL,
+    "Address" text NOT NULL
+);
+
+
+ALTER TABLE public."Audience" OWNER TO postgres;
+
+--
+-- TOC entry 229 (class 1259 OID 16528)
+-- Name: Certification; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Certification" (
+    "ID_certification" integer NOT NULL,
+    "Grade" integer NOT NULL,
+    "ID_disciplines" integer NOT NULL,
+    "Certification_type" text NOT NULL,
+    "ID_student" integer NOT NULL
+);
+
+
+ALTER TABLE public."Certification" OWNER TO postgres;
+
+--
+-- TOC entry 230 (class 1259 OID 16535)
+-- Name: Composition_of_the_commission; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Composition_of_the_commission" (
+    "ID_certification" integer NOT NULL,
+    "ID_compound" integer NOT NULL,
+    "ID_teacher" integer NOT NULL
+);
+
+
+ALTER TABLE public."Composition_of_the_commission" OWNER TO postgres;
+
+--
+-- TOC entry 216 (class 1259 OID 16398)
+-- Name: Direction_of_preparation; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Direction_of_preparation" (
+    "ID_direction" integer NOT NULL,
+    "Destination_name" text NOT NULL
+);
+
+
+ALTER TABLE public."Direction_of_preparation" OWNER TO postgres;
+
+--
+-- TOC entry 220 (class 1259 OID 16434)
+-- Name: Discipline; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Discipline" (
+    "ID_disciplines" integer NOT NULL,
+    "Discipline_name" text NOT NULL,
+    "Lek_hours" integer NOT NULL,
+    "Lab_hours" integer NOT NULL,
+    "Prak_hours" integer NOT NULL,
+    "Type_of_certification" text NOT NULL,
+    "Формат_реализации" text NOT NULL
+);
+
+
+ALTER TABLE public."Discipline" OWNER TO postgres;
+
+--
+-- TOC entry 219 (class 1259 OID 16429)
+-- Name: Discipline_in_UP; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Discipline_in_UP" (
+    "ID_disciplines_in_UP" integer NOT NULL,
+    "ID_discipline" integer NOT NULL,
+    "ID_UP" integer NOT NULL
+);
+
+
+ALTER TABLE public."Discipline_in_UP" OWNER TO postgres;
+
+--
+-- TOC entry 231 (class 1259 OID 16550)
+-- Name: Group; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Group" (
+    "ID_group" integer NOT NULL,
+    "ID_UP" integer NOT NULL,
+    "Group_numbers" text NOT NULL,
+    "from" date NOT NULL,
+    by date NOT NULL
+);
+
+
+ALTER TABLE public."Group" OWNER TO postgres;
+
+--
+-- TOC entry 228 (class 1259 OID 16513)
+-- Name: Job_History; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Job_History" (
+    "Start_date" date NOT NULL,
+    "ID_teacher" integer NOT NULL,
+    "End_date" date NOT NULL,
+    "ID_job" integer NOT NULL
+);
+
+
+ALTER TABLE public."Job_History" OWNER TO postgres;
+
+--
+-- TOC entry 226 (class 1259 OID 16499)
+-- Name: Job_title; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Job_title" (
+    "ID_job_title" integer NOT NULL,
+    "Salary" integer NOT NULL,
+    "Job_title_name" text NOT NULL,
+    "Number_of_bets" integer NOT NULL
+);
+
+
+ALTER TABLE public."Job_title" OWNER TO postgres;
+
+--
+-- TOC entry 218 (class 1259 OID 16412)
+-- Name: OP; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."OP" (
+    "ID_OP" integer NOT NULL,
+    "ID_directions" integer NOT NULL,
+    "ID_divisions" integer NOT NULL,
+    "OP_name" text NOT NULL,
+    "Implementation_format" text NOT NULL,
+    "Hours_volume" integer NOT NULL
+);
+
+
+ALTER TABLE public."OP" OWNER TO postgres;
+
+--
+-- TOC entry 234 (class 1259 OID 16599)
+-- Name: Schedule; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Schedule" (
+    "ID_schedules" integer NOT NULL,
+    "ID_audience" integer NOT NULL,
+    "ID_teacher" integer NOT NULL,
+    "ID_group" integer NOT NULL,
+    "ID_disciplines" integer NOT NULL,
+    "Start_time" date NOT NULL,
+    "End_time" date NOT NULL
+);
+
+
+ALTER TABLE public."Schedule" OWNER TO postgres;
+
+--
+-- TOC entry 223 (class 1259 OID 16468)
+-- Name: Scholarship; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Scholarship" (
+    "ID_scholarships" integer NOT NULL,
+    "Type_of_scholarship" text NOT NULL,
+    "Size" integer NOT NULL
+);
+
+
+ALTER TABLE public."Scholarship" OWNER TO postgres;
+
+--
+-- TOC entry 224 (class 1259 OID 16475)
+-- Name: Scholarship_Appointment; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Scholarship_Appointment" (
+    "ID_scholarship_assignment" integer NOT NULL,
+    "End_date" date NOT NULL,
+    "ID_student" integer NOT NULL,
+    "Assignment_date" date NOT NULL,
+    "Base" text NOT NULL,
+    "ID_scholarships" integer NOT NULL
+);
+
+
+ALTER TABLE public."Scholarship_Appointment" OWNER TO postgres;
+
+--
+-- TOC entry 233 (class 1259 OID 16579)
+-- Name: Session_schedule; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Session_schedule" (
+    "ID_session_schedules" integer NOT NULL,
+    "ID_audience" integer NOT NULL,
+    "ID_disciplines" integer NOT NULL,
+    "ID_groups" integer NOT NULL,
+    "from" date NOT NULL,
+    by date NOT NULL
+);
+
+
+ALTER TABLE public."Session_schedule" OWNER TO postgres;
+
+--
+-- TOC entry 225 (class 1259 OID 16487)
+-- Name: Student; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Student" (
+    "ID_student" integer NOT NULL,
+    "Surname" text NOT NULL,
+    "Name" text NOT NULL,
+    "Patronymic" text,
+    "Phone_number" integer NOT NULL,
+    "E-mail" text NOT NULL
+);
+
+
+ALTER TABLE public."Student" OWNER TO postgres;
+
+--
+-- TOC entry 232 (class 1259 OID 16562)
+-- Name: Student_learning; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Student_learning" (
+    "ID_student_learning" integer NOT NULL,
+    "from" date NOT NULL,
+    by date NOT NULL,
+    "ID_groups" integer NOT NULL,
+    "Status" text NOT NULL,
+    "ID_student" integer NOT NULL
+);
+
+
+ALTER TABLE public."Student_learning" OWNER TO postgres;
+
+--
+-- TOC entry 227 (class 1259 OID 16506)
+-- Name: Teacher; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Teacher" (
+    "ID_teacher" integer NOT NULL,
+    "Surname" text NOT NULL,
+    "Name" text NOT NULL,
+    "Patronymic" text,
+    "Phone_number" integer NOT NULL,
+    "E-mail" text NOT NULL
+);
+
+
+ALTER TABLE public."Teacher" OWNER TO postgres;
+
+--
+-- TOC entry 221 (class 1259 OID 16441)
+-- Name: UP; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."UP" (
+    "ID_UP" integer NOT NULL,
+    "Year_of_admission" integer NOT NULL,
+    "ID_OP" integer NOT NULL
+);
+
+
+ALTER TABLE public."UP" OWNER TO postgres;
+
+--
+-- TOC entry 217 (class 1259 OID 16405)
+-- Name: University_division; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."University_division" (
+    "ID_divisions" integer NOT NULL,
+    "Name_of_the_department" text NOT NULL
+);
+
+
+ALTER TABLE public."University_division" OWNER TO postgres;
+
+--
+-- TOC entry 3723 (class 0 OID 16461)
+-- Dependencies: 222
+-- Data for Name: Audience; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."Audience" ("ID_audience", "Type", "Status", "Audience_number", "Address") FROM stdin;
+\.
+
+
+--
+-- TOC entry 3730 (class 0 OID 16528)
+-- Dependencies: 229
+-- Data for Name: Certification; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."Certification" ("ID_certification", "Grade", "ID_disciplines", "Certification_type", "ID_student") FROM stdin;
+\.
+
+
+--
+-- TOC entry 3731 (class 0 OID 16535)
+-- Dependencies: 230
+-- Data for Name: Composition_of_the_commission; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."Composition_of_the_commission" ("ID_certification", "ID_compound", "ID_teacher") FROM stdin;
+\.
+
+
+--
+-- TOC entry 3717 (class 0 OID 16398)
+-- Dependencies: 216
+-- Data for Name: Direction_of_preparation; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."Direction_of_preparation" ("ID_direction", "Destination_name") FROM stdin;
+\.
+
+
+--
+-- TOC entry 3721 (class 0 OID 16434)
+-- Dependencies: 220
+-- Data for Name: Discipline; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."Discipline" ("ID_disciplines", "Discipline_name", "Lek_hours", "Lab_hours", "Prak_hours", "Type_of_certification", "Формат_реализации") FROM stdin;
+\.
+
+
+--
+-- TOC entry 3720 (class 0 OID 16429)
+-- Dependencies: 219
+-- Data for Name: Discipline_in_UP; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."Discipline_in_UP" ("ID_disciplines_in_UP", "ID_discipline", "ID_UP") FROM stdin;
+\.
+
+
+--
+-- TOC entry 3732 (class 0 OID 16550)
+-- Dependencies: 231
+-- Data for Name: Group; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."Group" ("ID_group", "ID_UP", "Group_numbers", "from", by) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3729 (class 0 OID 16513)
+-- Dependencies: 228
+-- Data for Name: Job_History; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."Job_History" ("Start_date", "ID_teacher", "End_date", "ID_job") FROM stdin;
+\.
+
+
+--
+-- TOC entry 3727 (class 0 OID 16499)
+-- Dependencies: 226
+-- Data for Name: Job_title; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."Job_title" ("ID_job_title", "Salary", "Job_title_name", "Number_of_bets") FROM stdin;
+\.
+
+
+--
+-- TOC entry 3719 (class 0 OID 16412)
+-- Dependencies: 218
+-- Data for Name: OP; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."OP" ("ID_OP", "ID_directions", "ID_divisions", "OP_name", "Implementation_format", "Hours_volume") FROM stdin;
+\.
+
+
+--
+-- TOC entry 3735 (class 0 OID 16599)
+-- Dependencies: 234
+-- Data for Name: Schedule; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."Schedule" ("ID_schedules", "ID_audience", "ID_teacher", "ID_group", "ID_disciplines", "Start_time", "End_time") FROM stdin;
+\.
+
+
+--
+-- TOC entry 3724 (class 0 OID 16468)
+-- Dependencies: 223
+-- Data for Name: Scholarship; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."Scholarship" ("ID_scholarships", "Type_of_scholarship", "Size") FROM stdin;
+\.
+
+
+--
+-- TOC entry 3725 (class 0 OID 16475)
+-- Dependencies: 224
+-- Data for Name: Scholarship_Appointment; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."Scholarship_Appointment" ("ID_scholarship_assignment", "End_date", "ID_student", "Assignment_date", "Base", "ID_scholarships") FROM stdin;
+\.
+
+
+--
+-- TOC entry 3734 (class 0 OID 16579)
+-- Dependencies: 233
+-- Data for Name: Session_schedule; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."Session_schedule" ("ID_session_schedules", "ID_audience", "ID_disciplines", "ID_groups", "from", by) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3726 (class 0 OID 16487)
+-- Dependencies: 225
+-- Data for Name: Student; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."Student" ("ID_student", "Surname", "Name", "Patronymic", "Phone_number", "E-mail") FROM stdin;
+\.
+
+
+--
+-- TOC entry 3733 (class 0 OID 16562)
+-- Dependencies: 232
+-- Data for Name: Student_learning; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."Student_learning" ("ID_student_learning", "from", by, "ID_groups", "Status", "ID_student") FROM stdin;
+\.
+
+
+--
+-- TOC entry 3728 (class 0 OID 16506)
+-- Dependencies: 227
+-- Data for Name: Teacher; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."Teacher" ("ID_teacher", "Surname", "Name", "Patronymic", "Phone_number", "E-mail") FROM stdin;
+\.
+
+
+--
+-- TOC entry 3722 (class 0 OID 16441)
+-- Dependencies: 221
+-- Data for Name: UP; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."UP" ("ID_UP", "Year_of_admission", "ID_OP") FROM stdin;
+\.
+
+
+--
+-- TOC entry 3718 (class 0 OID 16405)
+-- Dependencies: 217
+-- Data for Name: University_division; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."University_division" ("ID_divisions", "Name_of_the_department") FROM stdin;
+\.
+
+
+--
+-- TOC entry 3528 (class 2606 OID 16467)
+-- Name: Audience Audience_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Audience"
+    ADD CONSTRAINT "Audience_pkey" PRIMARY KEY ("ID_audience");
+
+
+--
+-- TOC entry 3542 (class 2606 OID 16534)
+-- Name: Certification Certification_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Certification"
+    ADD CONSTRAINT "Certification_pkey" PRIMARY KEY ("ID_certification");
+
+
+--
+-- TOC entry 3546 (class 2606 OID 16556)
+-- Name: Group Группа_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Group"
+    ADD CONSTRAINT "Группа_pkey" PRIMARY KEY ("ID_group");
+
+
+--
+-- TOC entry 3524 (class 2606 OID 16440)
+-- Name: Discipline Дисциплина_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Discipline"
+    ADD CONSTRAINT "Дисциплина_pkey" PRIMARY KEY ("ID_disciplines");
+
+
+--
+-- TOC entry 3522 (class 2606 OID 16433)
+-- Name: Discipline_in_UP Дисциплина_в_УП_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Discipline_in_UP"
+    ADD CONSTRAINT "Дисциплина_в_УП_pkey" PRIMARY KEY ("ID_disciplines_in_UP");
+
+
+--
+-- TOC entry 3536 (class 2606 OID 16505)
+-- Name: Job_title Должность_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Job_title"
+    ADD CONSTRAINT "Должность_pkey" PRIMARY KEY ("ID_job_title");
+
+
+--
+-- TOC entry 3540 (class 2606 OID 16517)
+-- Name: Job_History История_должностей_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Job_History"
+    ADD CONSTRAINT "История_должностей_pkey" PRIMARY KEY ("Start_date");
+
+
+--
+-- TOC entry 3532 (class 2606 OID 16481)
+-- Name: Scholarship_Appointment Назначение_стипендии_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Scholarship_Appointment"
+    ADD CONSTRAINT "Назначение_стипендии_pkey" PRIMARY KEY ("ID_scholarship_assignment");
+
+
+--
+-- TOC entry 3516 (class 2606 OID 16404)
+-- Name: Direction_of_preparation Направление_подготовки_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Direction_of_preparation"
+    ADD CONSTRAINT "Направление_подготовки_pkey" PRIMARY KEY ("ID_direction");
+
+
+--
+-- TOC entry 3520 (class 2606 OID 16418)
+-- Name: OP ОП_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."OP"
+    ADD CONSTRAINT "ОП_pkey" PRIMARY KEY ("ID_OP");
+
+
+--
+-- TOC entry 3548 (class 2606 OID 16568)
+-- Name: Student_learning Обучающийся_студент_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Student_learning"
+    ADD CONSTRAINT "Обучающийся_студент_pkey" PRIMARY KEY ("ID_student_learning");
+
+
+--
+-- TOC entry 3518 (class 2606 OID 16411)
+-- Name: University_division Подразделение_вуза_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."University_division"
+    ADD CONSTRAINT "Подразделение_вуза_pkey" PRIMARY KEY ("ID_divisions");
+
+
+--
+-- TOC entry 3538 (class 2606 OID 16510)
+-- Name: Teacher Преподователь_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Teacher"
+    ADD CONSTRAINT "Преподователь_pkey" PRIMARY KEY ("ID_teacher");
+
+
+--
+-- TOC entry 3552 (class 2606 OID 16603)
+-- Name: Schedule Расписание_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Schedule"
+    ADD CONSTRAINT "Расписание_pkey" PRIMARY KEY ("ID_schedules");
+
+
+--
+-- TOC entry 3550 (class 2606 OID 16583)
+-- Name: Session_schedule Расписание_сессии_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Session_schedule"
+    ADD CONSTRAINT "Расписание_сессии_pkey" PRIMARY KEY ("ID_session_schedules");
+
+
+--
+-- TOC entry 3544 (class 2606 OID 16539)
+-- Name: Composition_of_the_commission Состав_комиссии_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Composition_of_the_commission"
+    ADD CONSTRAINT "Состав_комиссии_pkey" PRIMARY KEY ("ID_compound");
+
+
+--
+-- TOC entry 3530 (class 2606 OID 16474)
+-- Name: Scholarship Стипендия_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Scholarship"
+    ADD CONSTRAINT "Стипендия_pkey" PRIMARY KEY ("ID_scholarships");
+
+
+--
+-- TOC entry 3534 (class 2606 OID 16493)
+-- Name: Student Студент_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Student"
+    ADD CONSTRAINT "Студент_pkey" PRIMARY KEY ("ID_student");
+
+
+--
+-- TOC entry 3526 (class 2606 OID 16445)
+-- Name: UP УП_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."UP"
+    ADD CONSTRAINT "УП_pkey" PRIMARY KEY ("ID_UP");
+
+
+--
+-- TOC entry 3557 (class 2606 OID 16446)
+-- Name: UP FK_ID_ОП; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."UP"
+    ADD CONSTRAINT "FK_ID_ОП" FOREIGN KEY ("ID_OP") REFERENCES public."OP"("ID_OP") ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 3555 (class 2606 OID 16456)
+-- Name: Discipline_in_UP FK_ID_УП; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Discipline_in_UP"
+    ADD CONSTRAINT "FK_ID_УП" FOREIGN KEY ("ID_UP") REFERENCES public."UP"("ID_UP") ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 3564 (class 2606 OID 16557)
+-- Name: Group FK_ID_УП; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Group"
+    ADD CONSTRAINT "FK_ID_УП" FOREIGN KEY ("ID_UP") REFERENCES public."UP"("ID_UP") ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 3562 (class 2606 OID 16540)
+-- Name: Composition_of_the_commission FK_ID_аттестации; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Composition_of_the_commission"
+    ADD CONSTRAINT "FK_ID_аттестации" FOREIGN KEY ("ID_certification") REFERENCES public."Certification"("ID_certification") ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 3567 (class 2606 OID 16584)
+-- Name: Session_schedule FK_ID_аудитории; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Session_schedule"
+    ADD CONSTRAINT "FK_ID_аудитории" FOREIGN KEY ("ID_audience") REFERENCES public."Audience"("ID_audience") ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 3570 (class 2606 OID 16604)
+-- Name: Schedule FK_ID_аудитории; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Schedule"
+    ADD CONSTRAINT "FK_ID_аудитории" FOREIGN KEY ("ID_audience") REFERENCES public."Audience"("ID_audience") ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 3565 (class 2606 OID 16574)
+-- Name: Student_learning FK_ID_группы; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Student_learning"
+    ADD CONSTRAINT "FK_ID_группы" FOREIGN KEY ("ID_groups") REFERENCES public."Group"("ID_group") ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 3568 (class 2606 OID 16594)
+-- Name: Session_schedule FK_ID_группы; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Session_schedule"
+    ADD CONSTRAINT "FK_ID_группы" FOREIGN KEY ("ID_groups") REFERENCES public."Group"("ID_group") ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 3571 (class 2606 OID 16614)
+-- Name: Schedule FK_ID_группы; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Schedule"
+    ADD CONSTRAINT "FK_ID_группы" FOREIGN KEY ("ID_group") REFERENCES public."Group"("ID_group") ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 3556 (class 2606 OID 16451)
+-- Name: Discipline_in_UP FK_ID_дисциплины; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Discipline_in_UP"
+    ADD CONSTRAINT "FK_ID_дисциплины" FOREIGN KEY ("ID_discipline") REFERENCES public."Discipline"("ID_disciplines") ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 3569 (class 2606 OID 16589)
+-- Name: Session_schedule FK_ID_дисциплины; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Session_schedule"
+    ADD CONSTRAINT "FK_ID_дисциплины" FOREIGN KEY ("ID_disciplines") REFERENCES public."Discipline"("ID_disciplines") ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 3572 (class 2606 OID 16619)
+-- Name: Schedule FK_ID_дисциплины; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Schedule"
+    ADD CONSTRAINT "FK_ID_дисциплины" FOREIGN KEY ("ID_disciplines") REFERENCES public."Discipline"("ID_disciplines") ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 3560 (class 2606 OID 16523)
+-- Name: Job_History FK_ID_должности; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Job_History"
+    ADD CONSTRAINT "FK_ID_должности" FOREIGN KEY ("ID_job") REFERENCES public."Job_title"("ID_job_title") ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 3553 (class 2606 OID 16419)
+-- Name: OP FK_ID_направления; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."OP"
+    ADD CONSTRAINT "FK_ID_направления" FOREIGN KEY ("ID_directions") REFERENCES public."Direction_of_preparation"("ID_direction") ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 3554 (class 2606 OID 16424)
+-- Name: OP FK_ID_подразделения; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."OP"
+    ADD CONSTRAINT "FK_ID_подразделения" FOREIGN KEY ("ID_divisions") REFERENCES public."University_division"("ID_divisions") ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 3563 (class 2606 OID 16545)
+-- Name: Composition_of_the_commission FK_ID_преподавателя; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Composition_of_the_commission"
+    ADD CONSTRAINT "FK_ID_преподавателя" FOREIGN KEY ("ID_teacher") REFERENCES public."Teacher"("ID_teacher") ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 3573 (class 2606 OID 16609)
+-- Name: Schedule FK_ID_преподавателя; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Schedule"
+    ADD CONSTRAINT "FK_ID_преподавателя" FOREIGN KEY ("ID_teacher") REFERENCES public."Teacher"("ID_teacher") ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 3561 (class 2606 OID 16518)
+-- Name: Job_History FK_ID_преподователя; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Job_History"
+    ADD CONSTRAINT "FK_ID_преподователя" FOREIGN KEY ("ID_teacher") REFERENCES public."Teacher"("ID_teacher") ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 3558 (class 2606 OID 16482)
+-- Name: Scholarship_Appointment FK_ID_стипендии; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Scholarship_Appointment"
+    ADD CONSTRAINT "FK_ID_стипендии" FOREIGN KEY ("ID_scholarships") REFERENCES public."Scholarship"("ID_scholarships") ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 3559 (class 2606 OID 16494)
+-- Name: Scholarship_Appointment FK_ID_студента; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Scholarship_Appointment"
+    ADD CONSTRAINT "FK_ID_студента" FOREIGN KEY ("ID_student") REFERENCES public."Student"("ID_student") ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 3566 (class 2606 OID 16569)
+-- Name: Student_learning FK_ID_студента; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Student_learning"
+    ADD CONSTRAINT "FK_ID_студента" FOREIGN KEY ("ID_student") REFERENCES public."Student"("ID_student") ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+-- Completed on 2025-04-24 14:33:07 MSK
+
+--
+-- PostgreSQL database dump complete
+--
+
