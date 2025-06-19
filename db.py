@@ -3,19 +3,11 @@ from psycopg2 import sql
 from logger import logger
 
 DB_PARAMS = {
-<<<<<<< HEAD
     "dbname": "postgres",
     "user": "postgres",
     "password": "Goshapes12!",
     "host": "localhost",
     "port": 5432,
-=======
-    'dbname': 'session',
-    'user': 'postgres',
-    'password': '1212',
-    'host': 'localhost',
-    'port': 5432,
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
 }
 
 

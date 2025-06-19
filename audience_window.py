@@ -1,5 +1,4 @@
 from PyQt5.QtWidgets import (
-<<<<<<< HEAD
     QWidget,
     QVBoxLayout,
     QPushButton,
@@ -12,10 +11,6 @@ from PyQt5.QtWidgets import (
     QDialog,
     QFormLayout,
     QDialogButtonBox,
-=======
-    QWidget, QVBoxLayout, QPushButton, QTableWidget, QTableWidgetItem,
-    QLineEdit, QHBoxLayout, QMessageBox, QDialog, QFormLayout, QDialogButtonBox
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
 )
 from db import get_connection
 from logger import logger
@@ -67,15 +62,9 @@ class AudienceWindow(QWidget):
             rows = cur.fetchall()
             self.table.setRowCount(len(rows))
             self.table.setColumnCount(5)
-<<<<<<< HEAD
             self.table.setHorizontalHeaderLabels(
                 ["ID", "Тип", "Статус", "Номер аудитории", "Адрес"]
             )
-=======
-            self.table.setHorizontalHeaderLabels([
-                "ID", "Тип", "Статус", "Номер аудитории", "Адрес"
-            ])
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
             for i, row in enumerate(rows):
                 for j, val in enumerate(row):
                     self.table.setItem(i, j, QTableWidgetItem(str(val)))
@@ -91,7 +80,6 @@ class AudienceWindow(QWidget):
         try:
             conn = get_connection()
             cur = conn.cursor()
-<<<<<<< HEAD
             cur.execute(
                 """
                 SELECT * FROM public."Audience"
@@ -100,13 +88,6 @@ class AudienceWindow(QWidget):
             """,
                 (f"%{keyword}%",),
             )
-=======
-            cur.execute("""
-                SELECT * FROM public."Audience"
-                WHERE "Address" ILIKE %s
-                ORDER BY "ID_audience"
-            """, (f"%{keyword}%",))
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
             rows = cur.fetchall()
             self.table.setRowCount(len(rows))
             for i, row in enumerate(rows):
@@ -125,7 +106,6 @@ class AudienceWindow(QWidget):
             try:
                 conn = get_connection()
                 cur = conn.cursor()
-<<<<<<< HEAD
                 cur.execute(
                     """
                     INSERT INTO public."Audience" ("Type", "Status", "Audience_number", "Address")
@@ -133,12 +113,6 @@ class AudienceWindow(QWidget):
                 """,
                     dialog.get_data(),
                 )
-=======
-                cur.execute("""
-                    INSERT INTO public."Audience" ("Type", "Status", "Audience_number", "Address")
-                    VALUES (%s, %s, %s, %s)
-                """, dialog.get_data())
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
                 conn.commit()
                 cur.close()
                 conn.close()
@@ -162,7 +136,6 @@ class AudienceWindow(QWidget):
             try:
                 conn = get_connection()
                 cur = conn.cursor()
-<<<<<<< HEAD
                 cur.execute(
                     """
                     UPDATE public."Audience"
@@ -171,13 +144,6 @@ class AudienceWindow(QWidget):
                 """,
                     (*dialog.get_data(), audience_id),
                 )
-=======
-                cur.execute("""
-                    UPDATE public."Audience"
-                    SET "Type" = %s, "Status" = %s, "Audience_number" = %s, "Address" = %s
-                    WHERE "ID_audience" = %s
-                """, (*dialog.get_data(), audience_id))
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
                 conn.commit()
                 cur.close()
                 conn.close()
@@ -195,30 +161,20 @@ class AudienceWindow(QWidget):
 
         audience_id = self.table.item(selected, 0).text()
         confirm = QMessageBox.question(
-<<<<<<< HEAD
             self,
             "Подтверждение",
             f"Удалить аудиторию ID {audience_id}?",
             QMessageBox.Yes | QMessageBox.No,
-=======
-            self, "Подтверждение",
-            f"Удалить аудиторию ID {audience_id}?",
-            QMessageBox.Yes | QMessageBox.No
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
         )
 
         if confirm == QMessageBox.Yes:
             try:
                 conn = get_connection()
                 cur = conn.cursor()
-<<<<<<< HEAD
                 cur.execute(
                     'DELETE FROM public."Audience" WHERE "ID_audience" = %s',
                     (audience_id,),
                 )
-=======
-                cur.execute('DELETE FROM public."Audience" WHERE "ID_audience" = %s', (audience_id,))
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
                 conn.commit()
                 cur.close()
                 conn.close()
@@ -230,7 +186,6 @@ class AudienceWindow(QWidget):
 
 
 class AudienceDialog(QDialog):
-<<<<<<< HEAD
     TYPE_OPTIONS = [
         "Лекционная",
         "Учебная",
@@ -240,14 +195,11 @@ class AudienceDialog(QDialog):
     ]
     STATUS_OPTIONS = ["В ремонте", "Активная", "Забронирована под мероприятие"]
 
-=======
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
     def __init__(self, type_="", status="", number="", address=""):
         super().__init__()
         self.setWindowTitle("Данные аудитории")
         layout = QFormLayout(self)
 
-<<<<<<< HEAD
         self.type_combo = QComboBox()
         self.type_combo.addItems(self.TYPE_OPTIONS)
         if type_ in self.TYPE_OPTIONS:
@@ -267,15 +219,6 @@ class AudienceDialog(QDialog):
 
         layout.addRow("Тип:", self.type_combo)
         layout.addRow("Статус:", self.status_combo)
-=======
-        self.type_input = QLineEdit(type_)
-        self.status_input = QLineEdit(status)
-        self.number_input = QLineEdit(number)
-        self.address_input = QLineEdit(address)
-
-        layout.addRow("Тип:", self.type_input)
-        layout.addRow("Статус:", self.status_input)
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
         layout.addRow("Номер аудитории:", self.number_input)
         layout.addRow("Адрес:", self.address_input)
 
@@ -286,15 +229,8 @@ class AudienceDialog(QDialog):
 
     def get_data(self):
         return (
-<<<<<<< HEAD
             self.type_combo.currentText(),
             self.status_combo.currentText(),
             int(self.number_input.text()),
             self.address_input.text(),
-=======
-            self.type_input.text(),
-            self.status_input.text(),
-            int(self.number_input.text()),
-            self.address_input.text()
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
         )

@@ -1,5 +1,4 @@
 from PyQt5.QtWidgets import (
-<<<<<<< HEAD
     QWidget,
     QVBoxLayout,
     QPushButton,
@@ -12,18 +11,11 @@ from PyQt5.QtWidgets import (
     QDialog,
     QFormLayout,
     QDialogButtonBox,
-=======
-    QWidget, QVBoxLayout, QPushButton, QTableWidget, QTableWidgetItem,
-    QLineEdit, QLabel, QHBoxLayout, QMessageBox, QDialog, QFormLayout, QDialogButtonBox
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
 )
 from db import get_connection
 from logger import logger
 
-<<<<<<< HEAD
 
-=======
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
 class TeacherWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -66,11 +58,7 @@ class TeacherWindow(QWidget):
         try:
             conn = get_connection()
             cur = conn.cursor()
-<<<<<<< HEAD
             cur.execute('SELECT * FROM public."Teacher" ORDER BY "ID_teacher"')
-=======
-            cur.execute("SELECT * FROM public.\"Teacher\" ORDER BY \"ID_teacher\"")
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
             rows = cur.fetchall()
             self.table.setRowCount(len(rows))
             self.table.setColumnCount(6)
@@ -92,7 +80,6 @@ class TeacherWindow(QWidget):
         try:
             conn = get_connection()
             cur = conn.cursor()
-<<<<<<< HEAD
             cur.execute(
                 """
                 SELECT * FROM public."Teacher"
@@ -101,13 +88,6 @@ class TeacherWindow(QWidget):
             """,
                 (f"%{keyword}%",),
             )
-=======
-            cur.execute("""
-                SELECT * FROM public."Teacher"
-                WHERE "Surname" ILIKE %s
-                ORDER BY "ID_teacher"
-            """, (f"%{keyword}%",))
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
             rows = cur.fetchall()
             self.table.setRowCount(len(rows))
             for i, row in enumerate(rows):
@@ -126,7 +106,6 @@ class TeacherWindow(QWidget):
             try:
                 conn = get_connection()
                 cur = conn.cursor()
-<<<<<<< HEAD
                 cur.execute(
                     """
                     INSERT INTO public."Teacher" ("Surname", "Name", "Patronymic", "Phone_number", "E-mail")
@@ -134,12 +113,6 @@ class TeacherWindow(QWidget):
                 """,
                     dialog.get_data(),
                 )
-=======
-                cur.execute("""
-                    INSERT INTO public."Teacher" ("Surname", "Name", "Patronymic", "Phone_number", "E-mail")
-                    VALUES (%s, %s, %s, %s, %s)
-                """, dialog.get_data())
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
                 conn.commit()
                 cur.close()
                 conn.close()
@@ -152,7 +125,6 @@ class TeacherWindow(QWidget):
     def edit_teacher(self):
         selected = self.table.currentRow()
         if selected < 0:
-<<<<<<< HEAD
             QMessageBox.warning(
                 self, "Внимание", "Выберите преподавателя для редактирования"
             )
@@ -160,38 +132,21 @@ class TeacherWindow(QWidget):
 
         teacher_id = self.table.item(selected, 0).text()
         current_data = [self.table.item(selected, i).text() for i in range(1, 6)]
-=======
-            QMessageBox.warning(self, "Внимание", "Выберите преподавателя для редактирования")
-            return
-
-        teacher_id = self.table.item(selected, 0).text()
-        current_data = [
-            self.table.item(selected, i).text() for i in range(1, 6)
-        ]
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
 
         dialog = TeacherDialog(*current_data)
         if dialog.exec_() == QDialog.Accepted:
             try:
                 conn = get_connection()
                 cur = conn.cursor()
-<<<<<<< HEAD
                 cur.execute(
                     """
-=======
-                cur.execute("""
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
                     UPDATE public."Teacher"
                     SET "Surname" = %s, "Name" = %s, "Patronymic" = %s,
                         "Phone_number" = %s, "E-mail" = %s
                     WHERE "ID_teacher" = %s
-<<<<<<< HEAD
                 """,
                     (*dialog.get_data(), teacher_id),
                 )
-=======
-                """, (*dialog.get_data(), teacher_id))
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
                 conn.commit()
                 cur.close()
                 conn.close()
@@ -209,30 +164,20 @@ class TeacherWindow(QWidget):
 
         teacher_id = self.table.item(selected, 0).text()
         confirm = QMessageBox.question(
-<<<<<<< HEAD
             self,
             "Подтверждение",
             f"Удалить преподавателя ID {teacher_id}?",
             QMessageBox.Yes | QMessageBox.No,
-=======
-            self, "Подтверждение",
-            f"Удалить преподавателя ID {teacher_id}?",
-            QMessageBox.Yes | QMessageBox.No
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
         )
 
         if confirm == QMessageBox.Yes:
             try:
                 conn = get_connection()
                 cur = conn.cursor()
-<<<<<<< HEAD
                 cur.execute(
                     'DELETE FROM public."Teacher" WHERE "ID_teacher" = %s',
                     (teacher_id,),
                 )
-=======
-                cur.execute('DELETE FROM public."Teacher" WHERE "ID_teacher" = %s', (teacher_id,))
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
                 conn.commit()
                 cur.close()
                 conn.close()
@@ -272,9 +217,5 @@ class TeacherDialog(QDialog):
             self.name.text(),
             self.patronymic.text(),
             self.phone.text(),
-<<<<<<< HEAD
             self.email.text(),
-=======
-            self.email.text()
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
         )

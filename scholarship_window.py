@@ -1,5 +1,4 @@
 from PyQt5.QtWidgets import (
-<<<<<<< HEAD
     QWidget,
     QVBoxLayout,
     QPushButton,
@@ -12,18 +11,11 @@ from PyQt5.QtWidgets import (
     QDialog,
     QFormLayout,
     QDialogButtonBox,
-=======
-    QWidget, QVBoxLayout, QPushButton, QTableWidget, QTableWidgetItem,
-    QLineEdit, QHBoxLayout, QMessageBox, QDialog, QFormLayout, QDialogButtonBox
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
 )
 from db import get_connection
 from logger import logger
 
-<<<<<<< HEAD
 
-=======
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
 class ScholarshipWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -86,7 +78,6 @@ class ScholarshipWindow(QWidget):
         try:
             conn = get_connection()
             cur = conn.cursor()
-<<<<<<< HEAD
             cur.execute(
                 """
                 SELECT * FROM public."Scholarship"
@@ -95,13 +86,6 @@ class ScholarshipWindow(QWidget):
             """,
                 (f"%{keyword}%",),
             )
-=======
-            cur.execute("""
-                SELECT * FROM public."Scholarship"
-                WHERE "Type_of_scholarship" ILIKE %s
-                ORDER BY "ID_scholarships"
-            """, (f"%{keyword}%",))
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
             rows = cur.fetchall()
             self.table.setRowCount(len(rows))
             for i, row in enumerate(rows):
@@ -120,7 +104,6 @@ class ScholarshipWindow(QWidget):
             try:
                 conn = get_connection()
                 cur = conn.cursor()
-<<<<<<< HEAD
                 cur.execute(
                     """
                     INSERT INTO public."Scholarship" ("Type_of_scholarship", "Size")
@@ -128,12 +111,6 @@ class ScholarshipWindow(QWidget):
                 """,
                     dialog.get_data(),
                 )
-=======
-                cur.execute("""
-                    INSERT INTO public."Scholarship" ("Type_of_scholarship", "Size")
-                    VALUES (%s, %s)
-                """, dialog.get_data())
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
                 conn.commit()
                 cur.close()
                 conn.close()
@@ -146,13 +123,9 @@ class ScholarshipWindow(QWidget):
     def edit_scholarship(self):
         selected = self.table.currentRow()
         if selected < 0:
-<<<<<<< HEAD
             QMessageBox.warning(
                 self, "Внимание", "Выберите стипендию для редактирования"
             )
-=======
-            QMessageBox.warning(self, "Внимание", "Выберите стипендию для редактирования")
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
             return
 
         scholarship_id = self.table.item(selected, 0).text()
@@ -164,7 +137,6 @@ class ScholarshipWindow(QWidget):
             try:
                 conn = get_connection()
                 cur = conn.cursor()
-<<<<<<< HEAD
                 cur.execute(
                     """
                     UPDATE public."Scholarship"
@@ -173,13 +145,6 @@ class ScholarshipWindow(QWidget):
                 """,
                     (*dialog.get_data(), scholarship_id),
                 )
-=======
-                cur.execute("""
-                    UPDATE public."Scholarship"
-                    SET "Type_of_scholarship" = %s, "Size" = %s
-                    WHERE "ID_scholarships" = %s
-                """, (*dialog.get_data(), scholarship_id))
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
                 conn.commit()
                 cur.close()
                 conn.close()
@@ -197,30 +162,20 @@ class ScholarshipWindow(QWidget):
 
         scholarship_id = self.table.item(selected, 0).text()
         confirm = QMessageBox.question(
-<<<<<<< HEAD
             self,
             "Подтверждение",
             f"Удалить стипендию ID {scholarship_id}?",
             QMessageBox.Yes | QMessageBox.No,
-=======
-            self, "Подтверждение",
-            f"Удалить стипендию ID {scholarship_id}?",
-            QMessageBox.Yes | QMessageBox.No
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
         )
 
         if confirm == QMessageBox.Yes:
             try:
                 conn = get_connection()
                 cur = conn.cursor()
-<<<<<<< HEAD
                 cur.execute(
                     'DELETE FROM public."Scholarship" WHERE "ID_scholarships" = %s',
                     (scholarship_id,),
                 )
-=======
-                cur.execute('DELETE FROM public."Scholarship" WHERE "ID_scholarships" = %s', (scholarship_id,))
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
                 conn.commit()
                 cur.close()
                 conn.close()
@@ -232,7 +187,6 @@ class ScholarshipWindow(QWidget):
 
 
 class ScholarshipDialog(QDialog):
-<<<<<<< HEAD
     SCHOLARSHIP_TYPES = [
         "-",
         "ГАС",
@@ -247,14 +201,10 @@ class ScholarshipDialog(QDialog):
     ]
 
     def __init__(self, scholarship_type="-", size=""):
-=======
-    def __init__(self, scholarship_type="", size=""):
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
         super().__init__()
         self.setWindowTitle("Данные стипендии")
         layout = QFormLayout(self)
 
-<<<<<<< HEAD
         self.type_combo = QComboBox()
         self.type_combo.addItems(self.SCHOLARSHIP_TYPES)
         if scholarship_type in self.SCHOLARSHIP_TYPES:
@@ -265,12 +215,6 @@ class ScholarshipDialog(QDialog):
         self.size_input = QLineEdit(size)
 
         layout.addRow("Вид стипендии:", self.type_combo)
-=======
-        self.type_input = QLineEdit(scholarship_type)
-        self.size_input = QLineEdit(size)
-
-        layout.addRow("Тип стипендии:", self.type_input)
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
         layout.addRow("Размер:", self.size_input)
 
         buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
@@ -279,8 +223,4 @@ class ScholarshipDialog(QDialog):
         layout.addWidget(buttons)
 
     def get_data(self):
-<<<<<<< HEAD
         return (self.type_combo.currentText(), int(self.size_input.text()))
-=======
-        return (self.type_input.text(), int(self.size_input.text()))
->>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
