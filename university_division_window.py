@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import (
+<<<<<<< HEAD
     QWidget,
     QVBoxLayout,
     QPushButton,
@@ -11,11 +12,18 @@ from PyQt5.QtWidgets import (
     QDialog,
     QFormLayout,
     QDialogButtonBox,
+=======
+    QWidget, QVBoxLayout, QPushButton, QTableWidget, QTableWidgetItem,
+    QLineEdit, QLabel, QHBoxLayout, QMessageBox, QDialog, QFormLayout, QDialogButtonBox
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
 )
 from db import get_connection
 from logger import logger
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
 class UniversityDivisionWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -58,9 +66,13 @@ class UniversityDivisionWindow(QWidget):
         try:
             conn = get_connection()
             cur = conn.cursor()
+<<<<<<< HEAD
             cur.execute(
                 'SELECT * FROM public."University_division" ORDER BY "ID_divisions"'
             )
+=======
+            cur.execute('SELECT * FROM public."University_division" ORDER BY "ID_divisions"')
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
             rows = cur.fetchall()
             self.table.setRowCount(len(rows))
             self.table.setColumnCount(2)
@@ -80,6 +92,7 @@ class UniversityDivisionWindow(QWidget):
         try:
             conn = get_connection()
             cur = conn.cursor()
+<<<<<<< HEAD
             cur.execute(
                 """
                 SELECT * FROM public."University_division"
@@ -88,6 +101,13 @@ class UniversityDivisionWindow(QWidget):
             """,
                 (f"%{keyword}%",),
             )
+=======
+            cur.execute("""
+                SELECT * FROM public."University_division"
+                WHERE "Name_of_the_department" ILIKE %s
+                ORDER BY "ID_divisions"
+            """, (f"%{keyword}%",))
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
             rows = cur.fetchall()
             self.table.setRowCount(len(rows))
             for i, row in enumerate(rows):
@@ -106,6 +126,7 @@ class UniversityDivisionWindow(QWidget):
             try:
                 conn = get_connection()
                 cur = conn.cursor()
+<<<<<<< HEAD
                 cur.execute(
                     """
                     INSERT INTO public."University_division" ("Name_of_the_department")
@@ -113,6 +134,12 @@ class UniversityDivisionWindow(QWidget):
                 """,
                     (dialog.get_data(),),
                 )
+=======
+                cur.execute("""
+                    INSERT INTO public."University_division" ("Name_of_the_department")
+                    VALUES (%s)
+                """, (dialog.get_data(),))
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
                 conn.commit()
                 cur.close()
                 conn.close()
@@ -125,9 +152,13 @@ class UniversityDivisionWindow(QWidget):
     def edit_division(self):
         selected = self.table.currentRow()
         if selected < 0:
+<<<<<<< HEAD
             QMessageBox.warning(
                 self, "Внимание", "Выберите подразделение для редактирования"
             )
+=======
+            QMessageBox.warning(self, "Внимание", "Выберите подразделение для редактирования")
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
             return
 
         division_id = self.table.item(selected, 0).text()
@@ -138,6 +169,7 @@ class UniversityDivisionWindow(QWidget):
             try:
                 conn = get_connection()
                 cur = conn.cursor()
+<<<<<<< HEAD
                 cur.execute(
                     """
                     UPDATE public."University_division"
@@ -146,6 +178,13 @@ class UniversityDivisionWindow(QWidget):
                 """,
                     (dialog.get_data(), division_id),
                 )
+=======
+                cur.execute("""
+                    UPDATE public."University_division"
+                    SET "Name_of_the_department" = %s
+                    WHERE "ID_divisions" = %s
+                """, (dialog.get_data(), division_id))
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
                 conn.commit()
                 cur.close()
                 conn.close()
@@ -163,20 +202,30 @@ class UniversityDivisionWindow(QWidget):
 
         division_id = self.table.item(selected, 0).text()
         confirm = QMessageBox.question(
+<<<<<<< HEAD
             self,
             "Подтверждение",
             f"Удалить подразделение ID {division_id}?",
             QMessageBox.Yes | QMessageBox.No,
+=======
+            self, "Подтверждение",
+            f"Удалить подразделение ID {division_id}?",
+            QMessageBox.Yes | QMessageBox.No
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
         )
 
         if confirm == QMessageBox.Yes:
             try:
                 conn = get_connection()
                 cur = conn.cursor()
+<<<<<<< HEAD
                 cur.execute(
                     'DELETE FROM public."University_division" WHERE "ID_divisions" = %s',
                     (division_id,),
                 )
+=======
+                cur.execute('DELETE FROM public."University_division" WHERE "ID_divisions" = %s', (division_id,))
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
                 conn.commit()
                 cur.close()
                 conn.close()

@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import (
+<<<<<<< HEAD
     QWidget,
     QVBoxLayout,
     QPushButton,
@@ -11,11 +12,18 @@ from PyQt5.QtWidgets import (
     QDialog,
     QFormLayout,
     QDialogButtonBox,
+=======
+    QWidget, QVBoxLayout, QPushButton, QTableWidget, QTableWidgetItem,
+    QLineEdit, QLabel, QHBoxLayout, QMessageBox, QDialog, QFormLayout, QDialogButtonBox
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
 )
 from db import get_connection
 from logger import logger
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
 class DisciplineWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -62,6 +70,7 @@ class DisciplineWindow(QWidget):
             rows = cur.fetchall()
             self.table.setRowCount(len(rows))
             self.table.setColumnCount(7)
+<<<<<<< HEAD
             self.table.setHorizontalHeaderLabels(
                 [
                     "ID",
@@ -73,6 +82,11 @@ class DisciplineWindow(QWidget):
                     "Формат",
                 ]
             )
+=======
+            self.table.setHorizontalHeaderLabels([
+                "ID", "Название", "Лекции", "Лабораторные", "Практики", "Аттестация", "Формат"
+            ])
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
             for i, row in enumerate(rows):
                 for j, val in enumerate(row):
                     self.table.setItem(i, j, QTableWidgetItem(str(val)))
@@ -88,6 +102,7 @@ class DisciplineWindow(QWidget):
         try:
             conn = get_connection()
             cur = conn.cursor()
+<<<<<<< HEAD
             cur.execute(
                 """
                 SELECT * FROM public."Discipline"
@@ -96,6 +111,13 @@ class DisciplineWindow(QWidget):
             """,
                 (f"%{keyword}%",),
             )
+=======
+            cur.execute("""
+                SELECT * FROM public."Discipline"
+                WHERE "Discipline_name" ILIKE %s
+                ORDER BY "ID_disciplines"
+            """, (f"%{keyword}%",))
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
             rows = cur.fetchall()
             self.table.setRowCount(len(rows))
             for i, row in enumerate(rows):
@@ -114,16 +136,24 @@ class DisciplineWindow(QWidget):
             try:
                 conn = get_connection()
                 cur = conn.cursor()
+<<<<<<< HEAD
                 cur.execute(
                     """
+=======
+                cur.execute("""
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
                     INSERT INTO public."Discipline" (
                         "Discipline_name", "Lek_hours", "Lab_hours", "Prak_hours",
                         "Type_of_certification", "Формат_реализации"
                     )
                     VALUES (%s, %s, %s, %s, %s, %s)
+<<<<<<< HEAD
                 """,
                     dialog.get_data(),
                 )
+=======
+                """, dialog.get_data())
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
                 conn.commit()
                 cur.close()
                 conn.close()
@@ -136,9 +166,13 @@ class DisciplineWindow(QWidget):
     def edit_discipline(self):
         selected = self.table.currentRow()
         if selected < 0:
+<<<<<<< HEAD
             QMessageBox.warning(
                 self, "Внимание", "Выберите дисциплину для редактирования"
             )
+=======
+            QMessageBox.warning(self, "Внимание", "Выберите дисциплину для редактирования")
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
             return
 
         discipline_id = self.table.item(selected, 0).text()
@@ -149,8 +183,12 @@ class DisciplineWindow(QWidget):
             try:
                 conn = get_connection()
                 cur = conn.cursor()
+<<<<<<< HEAD
                 cur.execute(
                     """
+=======
+                cur.execute("""
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
                     UPDATE public."Discipline"
                     SET 
                         "Discipline_name" = %s,
@@ -160,9 +198,13 @@ class DisciplineWindow(QWidget):
                         "Type_of_certification" = %s,
                         "Формат_реализации" = %s
                     WHERE "ID_disciplines" = %s
+<<<<<<< HEAD
                 """,
                     (*dialog.get_data(), discipline_id),
                 )
+=======
+                """, (*dialog.get_data(), discipline_id))
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
                 conn.commit()
                 cur.close()
                 conn.close()
@@ -180,20 +222,30 @@ class DisciplineWindow(QWidget):
 
         discipline_id = self.table.item(selected, 0).text()
         confirm = QMessageBox.question(
+<<<<<<< HEAD
             self,
             "Подтверждение",
             f"Удалить дисциплину ID {discipline_id}?",
             QMessageBox.Yes | QMessageBox.No,
+=======
+            self, "Подтверждение",
+            f"Удалить дисциплину ID {discipline_id}?",
+            QMessageBox.Yes | QMessageBox.No
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
         )
 
         if confirm == QMessageBox.Yes:
             try:
                 conn = get_connection()
                 cur = conn.cursor()
+<<<<<<< HEAD
                 cur.execute(
                     'DELETE FROM public."Discipline" WHERE "ID_disciplines" = %s',
                     (discipline_id,),
                 )
+=======
+                cur.execute('DELETE FROM public."Discipline" WHERE "ID_disciplines" = %s', (discipline_id,))
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
                 conn.commit()
                 cur.close()
                 conn.close()
@@ -205,9 +257,12 @@ class DisciplineWindow(QWidget):
 
 
 class DisciplineDialog(QDialog):
+<<<<<<< HEAD
     CERT_OPTIONS = ["Зачет", "Экзамен", "Дифференциальный зачет"]
     FORMAT_OPTIONS = ["Очно", "Дистанционно", "Смешанный"]
 
+=======
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
     def __init__(self, name="", lek="", lab="", prak="", cert="", format_=""):
         super().__init__()
         self.setWindowTitle("Данные дисциплины")
@@ -217,6 +272,7 @@ class DisciplineDialog(QDialog):
         self.lek = QLineEdit(lek)
         self.lab = QLineEdit(lab)
         self.prak = QLineEdit(prak)
+<<<<<<< HEAD
 
         self.cert_combo = QComboBox()
         self.cert_combo.addItems(self.CERT_OPTIONS)
@@ -231,13 +287,22 @@ class DisciplineDialog(QDialog):
             self.format_combo.setCurrentText(format_)
         else:
             self.format_combo.setCurrentIndex(0)
+=======
+        self.cert = QLineEdit(cert)
+        self.format = QLineEdit(format_)
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
 
         layout.addRow("Название:", self.name)
         layout.addRow("Лекционные часы:", self.lek)
         layout.addRow("Лабораторные часы:", self.lab)
         layout.addRow("Практические часы:", self.prak)
+<<<<<<< HEAD
         layout.addRow("Тип аттестации:", self.cert_combo)
         layout.addRow("Формат реализации:", self.format_combo)
+=======
+        layout.addRow("Тип аттестации:", self.cert)
+        layout.addRow("Формат реализации:", self.format)
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
 
         buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         buttons.accepted.connect(self.accept)
@@ -250,6 +315,11 @@ class DisciplineDialog(QDialog):
             int(self.lek.text()),
             int(self.lab.text()),
             int(self.prak.text()),
+<<<<<<< HEAD
             self.cert_combo.currentText(),
             self.format_combo.currentText(),
+=======
+            self.cert.text(),
+            self.format.text()
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
         )

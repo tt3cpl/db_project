@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import (
+<<<<<<< HEAD
     QWidget,
     QVBoxLayout,
     QPushButton,
@@ -10,11 +11,18 @@ from PyQt5.QtWidgets import (
     QDialog,
     QFormLayout,
     QDialogButtonBox,
+=======
+    QWidget, QVBoxLayout, QPushButton, QTableWidget, QTableWidgetItem,
+    QLineEdit, QHBoxLayout, QMessageBox, QDialog, QFormLayout, QDialogButtonBox
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
 )
 from db import get_connection
 from logger import logger
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
 class JobTitleWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -61,9 +69,13 @@ class JobTitleWindow(QWidget):
             rows = cur.fetchall()
             self.table.setRowCount(len(rows))
             self.table.setColumnCount(4)
+<<<<<<< HEAD
             self.table.setHorizontalHeaderLabels(
                 ["ID", "Зарплата", "Название должности", "Количество ставок"]
             )
+=======
+            self.table.setHorizontalHeaderLabels(["ID", "Зарплата", "Название должности", "Количество ставок"])
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
             for i, row in enumerate(rows):
                 for j, val in enumerate(row):
                     self.table.setItem(i, j, QTableWidgetItem(str(val)))
@@ -79,6 +91,7 @@ class JobTitleWindow(QWidget):
         try:
             conn = get_connection()
             cur = conn.cursor()
+<<<<<<< HEAD
             cur.execute(
                 """
                 SELECT * FROM public."Job_title"
@@ -87,6 +100,13 @@ class JobTitleWindow(QWidget):
             """,
                 (f"%{keyword}%",),
             )
+=======
+            cur.execute("""
+                SELECT * FROM public."Job_title"
+                WHERE "Job_title_name" ILIKE %s
+                ORDER BY "ID_job_title"
+            """, (f"%{keyword}%",))
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
             rows = cur.fetchall()
             self.table.setRowCount(len(rows))
             for i, row in enumerate(rows):
@@ -105,6 +125,7 @@ class JobTitleWindow(QWidget):
             try:
                 conn = get_connection()
                 cur = conn.cursor()
+<<<<<<< HEAD
                 cur.execute(
                     """
                     INSERT INTO public."Job_title" ("Salary", "Job_title_name", "Number_of_bets")
@@ -112,6 +133,12 @@ class JobTitleWindow(QWidget):
                 """,
                     dialog.get_data(),
                 )
+=======
+                cur.execute("""
+                    INSERT INTO public."Job_title" ("Salary", "Job_title_name", "Number_of_bets")
+                    VALUES (%s, %s, %s)
+                """, dialog.get_data())
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
                 conn.commit()
                 cur.close()
                 conn.close()
@@ -124,16 +151,24 @@ class JobTitleWindow(QWidget):
     def edit_job_title(self):
         selected = self.table.currentRow()
         if selected < 0:
+<<<<<<< HEAD
             QMessageBox.warning(
                 self, "Внимание", "Выберите должность для редактирования"
             )
+=======
+            QMessageBox.warning(self, "Внимание", "Выберите должность для редактирования")
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
             return
 
         job_title_id = self.table.item(selected, 0).text()
         current_data = [
             self.table.item(selected, 1).text(),
             self.table.item(selected, 2).text(),
+<<<<<<< HEAD
             self.table.item(selected, 3).text(),
+=======
+            self.table.item(selected, 3).text()
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
         ]
 
         dialog = JobTitleDialog(*current_data)
@@ -141,6 +176,7 @@ class JobTitleWindow(QWidget):
             try:
                 conn = get_connection()
                 cur = conn.cursor()
+<<<<<<< HEAD
                 cur.execute(
                     """
                     UPDATE public."Job_title"
@@ -149,6 +185,13 @@ class JobTitleWindow(QWidget):
                 """,
                     (*dialog.get_data(), job_title_id),
                 )
+=======
+                cur.execute("""
+                    UPDATE public."Job_title"
+                    SET "Salary" = %s, "Job_title_name" = %s, "Number_of_bets" = %s
+                    WHERE "ID_job_title" = %s
+                """, (*dialog.get_data(), job_title_id))
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
                 conn.commit()
                 cur.close()
                 conn.close()
@@ -166,20 +209,30 @@ class JobTitleWindow(QWidget):
 
         job_title_id = self.table.item(selected, 0).text()
         confirm = QMessageBox.question(
+<<<<<<< HEAD
             self,
             "Подтверждение",
             f"Удалить должность ID {job_title_id}?",
             QMessageBox.Yes | QMessageBox.No,
+=======
+            self, "Подтверждение",
+            f"Удалить должность ID {job_title_id}?",
+            QMessageBox.Yes | QMessageBox.No
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
         )
 
         if confirm == QMessageBox.Yes:
             try:
                 conn = get_connection()
                 cur = conn.cursor()
+<<<<<<< HEAD
                 cur.execute(
                     'DELETE FROM public."Job_title" WHERE "ID_job_title" = %s',
                     (job_title_id,),
                 )
+=======
+                cur.execute('DELETE FROM public."Job_title" WHERE "ID_job_title" = %s', (job_title_id,))
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
                 conn.commit()
                 cur.close()
                 conn.close()
@@ -213,5 +266,9 @@ class JobTitleDialog(QDialog):
         return (
             int(self.salary_input.text()),
             self.title_input.text(),
+<<<<<<< HEAD
             int(self.bets_input.text()),
+=======
+            int(self.bets_input.text())
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
         )

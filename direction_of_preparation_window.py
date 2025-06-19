@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import (
+<<<<<<< HEAD
     QWidget,
     QVBoxLayout,
     QPushButton,
@@ -10,11 +11,18 @@ from PyQt5.QtWidgets import (
     QDialog,
     QFormLayout,
     QDialogButtonBox,
+=======
+    QWidget, QVBoxLayout, QPushButton, QTableWidget, QTableWidgetItem,
+    QLineEdit, QHBoxLayout, QMessageBox, QDialog, QFormLayout, QDialogButtonBox
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
 )
 from db import get_connection
 from logger import logger
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
 class DirectionOfPreparationWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -57,9 +65,13 @@ class DirectionOfPreparationWindow(QWidget):
         try:
             conn = get_connection()
             cur = conn.cursor()
+<<<<<<< HEAD
             cur.execute(
                 'SELECT * FROM public."Direction_of_preparation" ORDER BY "ID_direction"'
             )
+=======
+            cur.execute('SELECT * FROM public."Direction_of_preparation" ORDER BY "ID_direction"')
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
             rows = cur.fetchall()
             self.table.setRowCount(len(rows))
             self.table.setColumnCount(2)
@@ -79,6 +91,7 @@ class DirectionOfPreparationWindow(QWidget):
         try:
             conn = get_connection()
             cur = conn.cursor()
+<<<<<<< HEAD
             cur.execute(
                 """
                 SELECT * FROM public."Direction_of_preparation"
@@ -87,6 +100,13 @@ class DirectionOfPreparationWindow(QWidget):
             """,
                 (f"%{keyword}%",),
             )
+=======
+            cur.execute("""
+                SELECT * FROM public."Direction_of_preparation"
+                WHERE "Destination_name" ILIKE %s
+                ORDER BY "ID_direction"
+            """, (f"%{keyword}%",))
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
             rows = cur.fetchall()
             self.table.setRowCount(len(rows))
             for i, row in enumerate(rows):
@@ -105,6 +125,7 @@ class DirectionOfPreparationWindow(QWidget):
             try:
                 conn = get_connection()
                 cur = conn.cursor()
+<<<<<<< HEAD
                 cur.execute(
                     """
                     INSERT INTO public."Direction_of_preparation" ("Destination_name")
@@ -112,6 +133,12 @@ class DirectionOfPreparationWindow(QWidget):
                 """,
                     dialog.get_data(),
                 )
+=======
+                cur.execute("""
+                    INSERT INTO public."Direction_of_preparation" ("Destination_name")
+                    VALUES (%s)
+                """, dialog.get_data())
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
                 conn.commit()
                 cur.close()
                 conn.close()
@@ -124,9 +151,13 @@ class DirectionOfPreparationWindow(QWidget):
     def edit_direction(self):
         selected = self.table.currentRow()
         if selected < 0:
+<<<<<<< HEAD
             QMessageBox.warning(
                 self, "Внимание", "Выберите направление для редактирования"
             )
+=======
+            QMessageBox.warning(self, "Внимание", "Выберите направление для редактирования")
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
             return
 
         direction_id = self.table.item(selected, 0).text()
@@ -137,6 +168,7 @@ class DirectionOfPreparationWindow(QWidget):
             try:
                 conn = get_connection()
                 cur = conn.cursor()
+<<<<<<< HEAD
                 cur.execute(
                     """
                     UPDATE public."Direction_of_preparation"
@@ -145,6 +177,13 @@ class DirectionOfPreparationWindow(QWidget):
                 """,
                     (dialog.get_data()[0], direction_id),
                 )
+=======
+                cur.execute("""
+                    UPDATE public."Direction_of_preparation"
+                    SET "Destination_name" = %s
+                    WHERE "ID_direction" = %s
+                """, (dialog.get_data()[0], direction_id))
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
                 conn.commit()
                 cur.close()
                 conn.close()
@@ -162,20 +201,30 @@ class DirectionOfPreparationWindow(QWidget):
 
         direction_id = self.table.item(selected, 0).text()
         confirm = QMessageBox.question(
+<<<<<<< HEAD
             self,
             "Подтверждение",
             f"Удалить направление ID {direction_id}?",
             QMessageBox.Yes | QMessageBox.No,
+=======
+            self, "Подтверждение",
+            f"Удалить направление ID {direction_id}?",
+            QMessageBox.Yes | QMessageBox.No
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
         )
 
         if confirm == QMessageBox.Yes:
             try:
                 conn = get_connection()
                 cur = conn.cursor()
+<<<<<<< HEAD
                 cur.execute(
                     'DELETE FROM public."Direction_of_preparation" WHERE "ID_direction" = %s',
                     (direction_id,),
                 )
+=======
+                cur.execute('DELETE FROM public."Direction_of_preparation" WHERE "ID_direction" = %s', (direction_id,))
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
                 conn.commit()
                 cur.close()
                 conn.close()

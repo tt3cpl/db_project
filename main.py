@@ -2,13 +2,18 @@ import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget
 from student_window import StudentWindow
 from discipline_window import DisciplineWindow
+<<<<<<< HEAD
 from teacher_window import TeacherWindow
+=======
+from teacher_window import TeacherWindow  
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
 from university_division_window import UniversityDivisionWindow
 from scholarship_window import ScholarshipWindow
 from job_title_window import JobTitleWindow
 from direction_of_preparation_window import DirectionOfPreparationWindow
 from certification_window import CertificationWindow
 from audience_window import AudienceWindow
+<<<<<<< HEAD
 from op_window import OPWindow
 from up_window import UPWindow
 from discipline_in_up_window import DisciplineInUPWindow
@@ -21,6 +26,10 @@ from scholarship_appointment_window import ScholarshipAppointmentWindow
 from logger import logger
 
 
+=======
+from logger import logger
+
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -37,7 +46,11 @@ class MainWindow(QMainWindow):
         btn_discipline.clicked.connect(self.open_disciplines)
         layout.addWidget(btn_discipline)
 
+<<<<<<< HEAD
         btn_teacher = QPushButton("Преподаватели")
+=======
+        btn_teacher = QPushButton("Преподаватели") 
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
         btn_teacher.clicked.connect(self.open_teachers)
         layout.addWidget(btn_teacher)
 
@@ -65,6 +78,7 @@ class MainWindow(QMainWindow):
         btn_audience.clicked.connect(self.open_audience)
         layout.addWidget(btn_audience)
 
+<<<<<<< HEAD
         btn_op = QPushButton("Образовательные программы")
         btn_op.clicked.connect(self.open_op)
         layout.addWidget(btn_op)
@@ -101,6 +115,8 @@ class MainWindow(QMainWindow):
         btn_scholarship_appointment.clicked.connect(self.open_scholarship_appointment)
         layout.addWidget(btn_scholarship_appointment)
 
+=======
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
         container = QWidget()
         container.setLayout(layout)
         self.setCentralWidget(container)
@@ -115,16 +131,28 @@ class MainWindow(QMainWindow):
         self.discipline_window.show()
         logger.info("Открыто окно дисциплин")
 
+<<<<<<< HEAD
     def open_teachers(self):
         self.teacher_window = TeacherWindow()
         self.teacher_window.show()
         logger.info("Открыто окно преподавателей")
 
+=======
+    def open_teachers(self):  
+        self.teacher_window = TeacherWindow()
+        self.teacher_window.show()
+        logger.info("Открыто окно преподавателей")
+    
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
     def open_divisions(self):
         self.division_window = UniversityDivisionWindow()
         self.division_window.show()
         logger.info("Открыто окно подразделений ВУЗа")
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
     def open_scholarships(self):
         self.scholarship_window = ScholarshipWindow()
         self.scholarship_window.show()
@@ -134,22 +162,35 @@ class MainWindow(QMainWindow):
         self.job_title_window = JobTitleWindow()
         self.job_title_window.show()
         logger.info("Открыто окно должностей")
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
     def open_directions(self):
         self.direction_window = DirectionOfPreparationWindow()
         self.direction_window.show()
         logger.info("Открыто окно направлений подготовки")
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
     def open_certifications(self):
         self.certification_window = CertificationWindow()
         self.certification_window.show()
         logger.info("Открыто окно аттестаций")
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
     def open_audience(self):
         self.audience_window = AudienceWindow()
         self.audience_window.show()
         logger.info("Открыто окно аудиторий")
 
+<<<<<<< HEAD
     def open_op(self):
         self.op_window = OPWindow()
         self.op_window.show()
@@ -197,6 +238,10 @@ class MainWindow(QMainWindow):
 
 
 if __name__ == "__main__":
+=======
+
+if __name__ == '__main__':
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
     app = QApplication(sys.argv)
     main_win = MainWindow()
     main_win.show()

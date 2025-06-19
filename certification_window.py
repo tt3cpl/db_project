@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import (
+<<<<<<< HEAD
     QWidget,
     QVBoxLayout,
     QPushButton,
@@ -11,6 +12,10 @@ from PyQt5.QtWidgets import (
     QFormLayout,
     QDialogButtonBox,
     QComboBox,
+=======
+    QWidget, QVBoxLayout, QPushButton, QTableWidget, QTableWidgetItem,
+    QLineEdit, QHBoxLayout, QMessageBox, QDialog, QFormLayout, QDialogButtonBox
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
 )
 from db import get_connection
 from logger import logger
@@ -20,13 +25,21 @@ class CertificationWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Таблица: Аттестации")
+<<<<<<< HEAD
         self.setGeometry(100, 100, 900, 400)
+=======
+        self.setGeometry(100, 100, 700, 350)
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
 
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
 
         self.search_box = QLineEdit()
+<<<<<<< HEAD
         self.search_box.setPlaceholderText("Поиск по фамилии студента...")
+=======
+        self.search_box.setPlaceholderText("Поиск по типу аттестации...")
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
         self.search_box.textChanged.connect(self.search_certifications)
         self.layout.addWidget(self.search_box)
 
@@ -34,6 +47,7 @@ class CertificationWindow(QWidget):
         self.layout.addWidget(self.table)
 
         btns = QHBoxLayout()
+<<<<<<< HEAD
         for name, handler in [
             ("Обновить", self.load_data),
             ("Добавить", self.add_record),
@@ -43,6 +57,24 @@ class CertificationWindow(QWidget):
             btn = QPushButton(name)
             btn.clicked.connect(handler)
             btns.addWidget(btn)
+=======
+
+        refresh_btn = QPushButton("Обновить")
+        refresh_btn.clicked.connect(self.load_data)
+        btns.addWidget(refresh_btn)
+
+        add_btn = QPushButton("Добавить")
+        add_btn.clicked.connect(self.add_certification)
+        btns.addWidget(add_btn)
+
+        edit_btn = QPushButton("Редактировать")
+        edit_btn.clicked.connect(self.edit_certification)
+        btns.addWidget(edit_btn)
+
+        delete_btn = QPushButton("Удалить")
+        delete_btn.clicked.connect(self.delete_certification)
+        btns.addWidget(delete_btn)
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
 
         self.layout.addLayout(btns)
         self.load_data()
@@ -51,6 +83,7 @@ class CertificationWindow(QWidget):
         try:
             conn = get_connection()
             cur = conn.cursor()
+<<<<<<< HEAD
             cur.execute(
                 """
                 SELECT c."ID_certification", s."Surname", d."Discipline_name",
@@ -81,12 +114,27 @@ class CertificationWindow(QWidget):
                 for j, val in enumerate(row):
                     if j == 3:  # Grade
                         val = CertificationDialog.REVERSE_GRADE_MAP.get(val, str(val))
+=======
+            cur.execute('SELECT * FROM public."Certification" ORDER BY "ID_certification"')
+            rows = cur.fetchall()
+            self.table.setRowCount(len(rows))
+            self.table.setColumnCount(5)
+            self.table.setHorizontalHeaderLabels([
+                "ID", "Оценка", "ID дисциплины", "Тип аттестации", "ID студента"
+            ])
+            for i, row in enumerate(rows):
+                for j, val in enumerate(row):
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
                     self.table.setItem(i, j, QTableWidgetItem(str(val)))
             cur.close()
             conn.close()
             logger.info("Загружены данные аттестаций")
         except Exception as e:
+<<<<<<< HEAD
             logger.error(f"Ошибка загрузки аттестаций: {e}")
+=======
+            logger.error(f"Ошибка загрузки данных: {e}")
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
             QMessageBox.critical(self, "Ошибка", str(e))
 
     def search_certifications(self):
@@ -94,6 +142,7 @@ class CertificationWindow(QWidget):
         try:
             conn = get_connection()
             cur = conn.cursor()
+<<<<<<< HEAD
             cur.execute(
                 """
                 SELECT c."ID_certification", s."Surname", d."Discipline_name",
@@ -107,19 +156,34 @@ class CertificationWindow(QWidget):
             """,
                 (f"%{keyword}%",),
             )
+=======
+            cur.execute("""
+                SELECT * FROM public."Certification"
+                WHERE "Certification_type" ILIKE %s
+                ORDER BY "ID_certification"
+            """, (f"%{keyword}%",))
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
             rows = cur.fetchall()
             self.table.setRowCount(len(rows))
             for i, row in enumerate(rows):
                 for j, val in enumerate(row):
+<<<<<<< HEAD
                     if j == 3:
                         val = CertificationDialog.REVERSE_GRADE_MAP.get(val, str(val))
                     self.table.setItem(i, j, QTableWidgetItem(str(val)))
             cur.close()
             conn.close()
+=======
+                    self.table.setItem(i, j, QTableWidgetItem(str(val)))
+            cur.close()
+            conn.close()
+            logger.info(f"Поиск аттестаций: {keyword}")
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
         except Exception as e:
             logger.error(f"Ошибка поиска: {e}")
             QMessageBox.critical(self, "Ошибка", str(e))
 
+<<<<<<< HEAD
     def add_record(self):
         dialog = CertificationDialog()
         if dialog.exec_() == QDialog.Accepted:
@@ -135,21 +199,42 @@ class CertificationWindow(QWidget):
                 """,
                     data,
                 )
+=======
+    def add_certification(self):
+        dialog = CertificationDialog()
+        if dialog.exec_() == QDialog.Accepted:
+            try:
+                conn = get_connection()
+                cur = conn.cursor()
+                cur.execute("""
+                    INSERT INTO public."Certification" ("Grade", "ID_disciplines", "Certification_type", "ID_student")
+                    VALUES (%s, %s, %s, %s)
+                """, dialog.get_data())
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
                 conn.commit()
                 cur.close()
                 conn.close()
                 self.load_data()
+<<<<<<< HEAD
                 logger.info("Добавлена запись аттестации")
+=======
+                logger.info("Добавлена аттестация")
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
             except Exception as e:
                 logger.error(f"Ошибка добавления: {e}")
                 QMessageBox.critical(self, "Ошибка", str(e))
 
+<<<<<<< HEAD
     def edit_record(self):
+=======
+    def edit_certification(self):
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
         selected = self.table.currentRow()
         if selected < 0:
             QMessageBox.warning(self, "Внимание", "Выберите запись для редактирования")
             return
 
+<<<<<<< HEAD
         record_id = self.table.item(selected, 0).text()
         grade_str = self.table.item(selected, 3).text()
         cert_type = self.table.item(selected, 4).text()
@@ -175,21 +260,46 @@ class CertificationWindow(QWidget):
                 """,
                     (*data, record_id),
                 )
+=======
+        certification_id = self.table.item(selected, 0).text()
+        current_data = [self.table.item(selected, i).text() for i in range(1, 5)]
+
+        dialog = CertificationDialog(*current_data)
+        if dialog.exec_() == QDialog.Accepted:
+            try:
+                conn = get_connection()
+                cur = conn.cursor()
+                cur.execute("""
+                    UPDATE public."Certification"
+                    SET "Grade" = %s, "ID_disciplines" = %s, "Certification_type" = %s, "ID_student" = %s
+                    WHERE "ID_certification" = %s
+                """, (*dialog.get_data(), certification_id))
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
                 conn.commit()
                 cur.close()
                 conn.close()
                 self.load_data()
+<<<<<<< HEAD
                 logger.info(f"Обновлена аттестация ID={record_id}")
             except Exception as e:
                 logger.error(f"Ошибка обновления: {e}")
                 QMessageBox.critical(self, "Ошибка", str(e))
 
     def delete_record(self):
+=======
+                logger.info(f"Отредактирована аттестация ID={certification_id}")
+            except Exception as e:
+                logger.error(f"Ошибка редактирования: {e}")
+                QMessageBox.critical(self, "Ошибка", str(e))
+
+    def delete_certification(self):
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
         selected = self.table.currentRow()
         if selected < 0:
             QMessageBox.warning(self, "Внимание", "Выберите запись для удаления")
             return
 
+<<<<<<< HEAD
         record_id = self.table.item(selected, 0).text()
         confirm = QMessageBox.question(
             self,
@@ -197,25 +307,43 @@ class CertificationWindow(QWidget):
             f"Удалить запись ID {record_id}?",
             QMessageBox.Yes | QMessageBox.No,
         )
+=======
+        certification_id = self.table.item(selected, 0).text()
+        confirm = QMessageBox.question(
+            self, "Подтверждение",
+            f"Удалить аттестацию ID {certification_id}?",
+            QMessageBox.Yes | QMessageBox.No
+        )
+
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
         if confirm == QMessageBox.Yes:
             try:
                 conn = get_connection()
                 cur = conn.cursor()
+<<<<<<< HEAD
                 cur.execute(
                     'DELETE FROM public."Certification" WHERE "ID_certification" = %s',
                     (record_id,),
                 )
+=======
+                cur.execute('DELETE FROM public."Certification" WHERE "ID_certification" = %s', (certification_id,))
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
                 conn.commit()
                 cur.close()
                 conn.close()
                 self.load_data()
+<<<<<<< HEAD
                 logger.info(f"Аттестация ID={record_id} удалена")
+=======
+                logger.info(f"Удалена аттестация ID={certification_id}")
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
             except Exception as e:
                 logger.error(f"Ошибка удаления: {e}")
                 QMessageBox.critical(self, "Ошибка", str(e))
 
 
 class CertificationDialog(QDialog):
+<<<<<<< HEAD
     GRADE_MAP = {"2FX": 2, "3F": 3, "3D": 4, "4C": 5, "4B": 6, "5A": 7}
     REVERSE_GRADE_MAP = {v: k for k, v in GRADE_MAP.items()}
     ATTEMPT_NUMBERS = ["1", "2", "3"]
@@ -258,12 +386,29 @@ class CertificationDialog(QDialog):
         layout.addRow("Номер попытки:", self.attempt_box)
         layout.addRow("Студент:", self.student_box)
         layout.addRow("Дисциплина:", self.discipline_box)
+=======
+    def __init__(self, grade="", id_discipline="", cert_type="", id_student=""):
+        super().__init__()
+        self.setWindowTitle("Данные аттестации")
+        layout = QFormLayout(self)
+
+        self.grade_input = QLineEdit(grade)
+        self.discipline_input = QLineEdit(id_discipline)
+        self.cert_type_input = QLineEdit(cert_type)
+        self.student_input = QLineEdit(id_student)
+
+        layout.addRow("Оценка:", self.grade_input)
+        layout.addRow("ID дисциплины:", self.discipline_input)
+        layout.addRow("Тип аттестации:", self.cert_type_input)
+        layout.addRow("ID студента:", self.student_input)
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
 
         buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         buttons.accepted.connect(self.accept)
         buttons.rejected.connect(self.reject)
         layout.addWidget(buttons)
 
+<<<<<<< HEAD
     def load_students(self, selected_id=""):
         conn = get_connection()
         cur = conn.cursor()
@@ -307,4 +452,12 @@ class CertificationDialog(QDialog):
             self.cert_type_box.text(),
             self.student_box.currentData(),
             int(self.attempt_box.currentText()),
+=======
+    def get_data(self):
+        return (
+            int(self.grade_input.text()),
+            int(self.discipline_input.text()),
+            self.cert_type_input.text(),
+            int(self.student_input.text())
+>>>>>>> d8d353c4260bb55e6728d0a2be9f2b8092c1954a
         )
