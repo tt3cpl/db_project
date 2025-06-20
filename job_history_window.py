@@ -62,12 +62,12 @@ class JobHistoryWindow(QWidget):
             cur = conn.cursor()
             cur.execute(
                 """
-                SELECT h."Start_date", t."Surname", t."Name", t."Patronymic",
-                       j."Job_title_name", h."End_date", h."ID_teacher", h."ID_job"
+                SELECT h."from", t."Surname", t."Name", t."Patronymic",
+                       j."Job_title_name", h."by", h."ID_teacher", h."ID_job"
                 FROM public."Job_History" h
                 JOIN public."Teacher" t ON h."ID_teacher" = t."ID_teacher"
                 JOIN public."Job_title" j ON h."ID_job" = j."ID_job_title"
-                ORDER BY h."Start_date"
+                ORDER BY h."from"
             """
             )
             rows = cur.fetchall()
@@ -102,13 +102,13 @@ class JobHistoryWindow(QWidget):
             cur = conn.cursor()
             cur.execute(
                 """
-                SELECT h."Start_date", t."Surname", t."Name", t."Patronymic",
-                       j."Job_title_name", h."End_date", h."ID_teacher", h."ID_job"
+                SELECT h."from", t."Surname", t."Name", t."Patronymic",
+                       j."Job_title_name", h."by", h."ID_teacher", h."ID_job"
                 FROM public."Job_History" h
                 JOIN public."Teacher" t ON h."ID_teacher" = t."ID_teacher"
                 JOIN public."Job_title" j ON h."ID_job" = j."ID_job_title"
                 WHERE t."Surname" ILIKE %s
-                ORDER BY h."Start_date"
+                ORDER BY h."from"
             """,
                 (f"%{keyword}%",),
             )
@@ -133,7 +133,7 @@ class JobHistoryWindow(QWidget):
                 cur = conn.cursor()
                 cur.execute(
                     """
-                    INSERT INTO public."Job_History" ("Start_date", "ID_teacher", "End_date", "ID_job")
+                    INSERT INTO public."Job_History" ("from", "ID_teacher", "by", "ID_job")
                     VALUES (%s, %s, %s, %s)
                 """,
                     data,
@@ -169,8 +169,8 @@ class JobHistoryWindow(QWidget):
                 cur.execute(
                     """
                     UPDATE public."Job_History"
-                    SET "End_date" = %s, "ID_teacher" = %s, "ID_job" = %s
-                    WHERE "Start_date" = %s
+                    SET "by" = %s, "ID_teacher" = %s, "ID_job" = %s
+                    WHERE "from" = %s
                 """,
                     (data[2], data[1], data[3], data[0]),
                 )
@@ -201,7 +201,7 @@ class JobHistoryWindow(QWidget):
                 conn = get_connection()
                 cur = conn.cursor()
                 cur.execute(
-                    'DELETE FROM public."Job_History" WHERE "Start_date" = %s',
+                    'DELETE FROM public."Job_History" WHERE "from" = %s',
                     (start_date,),
                 )
                 conn.commit()

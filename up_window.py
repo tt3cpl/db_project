@@ -195,4 +195,4 @@ class UPDialog(QDialog):
             QMessageBox.critical(self, "Ошибка загрузки ОП", str(e))
 
     def get_data(self):
-        return (int(self.year_edit.text()), self.op_map[self.op_combo.currentText()])
+        return (self.year_edit.text(), self.op_map[self.op_combo.currentText()])

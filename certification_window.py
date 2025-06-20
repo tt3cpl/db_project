@@ -79,8 +79,6 @@ class CertificationWindow(QWidget):
             )
             for i, row in enumerate(rows):
                 for j, val in enumerate(row):
-                    if j == 3:  # Grade
-                        val = CertificationDialog.REVERSE_GRADE_MAP.get(val, str(val))
                     self.table.setItem(i, j, QTableWidgetItem(str(val)))
             cur.close()
             conn.close()
@@ -111,8 +109,6 @@ class CertificationWindow(QWidget):
             self.table.setRowCount(len(rows))
             for i, row in enumerate(rows):
                 for j, val in enumerate(row):
-                    if j == 3:
-                        val = CertificationDialog.REVERSE_GRADE_MAP.get(val, str(val))
                     self.table.setItem(i, j, QTableWidgetItem(str(val)))
             cur.close()
             conn.close()
@@ -216,13 +212,12 @@ class CertificationWindow(QWidget):
 
 
 class CertificationDialog(QDialog):
-    GRADE_MAP = {"2FX": 2, "3F": 3, "3D": 4, "4C": 5, "4B": 6, "5A": 7}
-    REVERSE_GRADE_MAP = {v: k for k, v in GRADE_MAP.items()}
+    GRADE_MAP = ["2FX", "3F", "3D", "4C", "4B", "5A"]
     ATTEMPT_NUMBERS = ["1", "2", "3"]
 
     def __init__(
         self,
-        grade="",
+        grade="5A",
         discipline_id="",
         cert_type="",
         student_id="",
@@ -233,7 +228,7 @@ class CertificationDialog(QDialog):
         layout = QFormLayout(self)
 
         self.grade_box = QComboBox()
-        self.grade_box.addItems(self.GRADE_MAP.keys())
+        self.grade_box.addItems(self.GRADE_MAP)
         if grade in self.GRADE_MAP:
             self.grade_box.setCurrentText(grade)
 
@@ -300,9 +295,8 @@ class CertificationDialog(QDialog):
             self.cert_type_box.setText("")
 
     def get_data(self):
-        grade_value = self.GRADE_MAP[self.grade_box.currentText()]
         return (
-            grade_value,
+            self.grade_box.currentText(),
             self.discipline_box.currentData(),
             self.cert_type_box.text(),
             self.student_box.currentData(),

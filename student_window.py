@@ -63,7 +63,7 @@ class StudentWindow(QWidget):
             self.table.setRowCount(len(rows))
             self.table.setColumnCount(6)
             self.table.setHorizontalHeaderLabels(
-                ["ID", "Фамилия", "Имя", "Отчество", "Телефон", "Email"]
+                ["ID", "Фамилия", "Имя", "Отчество", "Email", "Телефон"]
             )
             for i, row in enumerate(rows):
                 for j, val in enumerate(row):
@@ -141,7 +141,7 @@ class StudentWindow(QWidget):
                 cur.execute(
                     """
                     UPDATE public."Student"
-                    SET "Surname" = %s, "Name" = %s, "Patronymic" = %s, "E-mail"" = %s, "Phone_number" = %s
+                    SET "Surname" = %s, "Name" = %s, "Patronymic" = %s, "E-mail" = %s, "Phone_number" = %s
                     WHERE "ID_student" = %s
                 """,
                     (*dialog.get_data(), student_id),
@@ -188,7 +188,7 @@ class StudentWindow(QWidget):
 
 
 class StudentDialog(QDialog):
-    def __init__(self, surname="", name="", patronymic="", phone="", email=""):
+    def __init__(self, surname="", name="", patronymic="", email="", phone=""):
         super().__init__()
         self.setWindowTitle("Данные студента")
         layout = QFormLayout(self)

@@ -118,7 +118,7 @@ class DisciplineWindow(QWidget):
                     """
                     INSERT INTO public."Discipline" (
                         "Discipline_name", "Lek_hours", "Lab_hours", "Prak_hours",
-                        "Type_of_certification", "Формат_реализации"
+                        "Type_of_certification", "Realization_format"
                     )
                     VALUES (%s, %s, %s, %s, %s, %s)
                 """,
@@ -158,7 +158,7 @@ class DisciplineWindow(QWidget):
                         "Lab_hours" = %s,
                         "Prak_hours" = %s,
                         "Type_of_certification" = %s,
-                        "Формат_реализации" = %s
+                        "Realization_format" = %s
                     WHERE "ID_disciplines" = %s
                 """,
                     (*dialog.get_data(), discipline_id),
@@ -205,7 +205,7 @@ class DisciplineWindow(QWidget):
 
 
 class DisciplineDialog(QDialog):
-    CERT_OPTIONS = ["Зачет", "Экзамен", "Дифференциальный зачет"]
+    CERT_OPTIONS = ["Зачет", "Экзамен", "Дифференцированный зачет"]
     FORMAT_OPTIONS = ["Очно", "Дистанционно", "Смешанный"]
 
     def __init__(self, name="", lek="", lab="", prak="", cert="", format_=""):
@@ -247,9 +247,9 @@ class DisciplineDialog(QDialog):
     def get_data(self):
         return (
             self.name.text(),
-            int(self.lek.text()),
-            int(self.lab.text()),
-            int(self.prak.text()),
+            float(self.lek.text()),
+            float(self.lab.text()),
+            float(self.prak.text()),
             self.cert_combo.currentText(),
             self.format_combo.currentText(),
         )

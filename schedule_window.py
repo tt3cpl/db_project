@@ -10,10 +10,10 @@ from PyQt5.QtWidgets import (
     QDialog,
     QFormLayout,
     QDialogButtonBox,
-    QDateEdit,
+    QDateTimeEdit,
     QComboBox,
 )
-from PyQt5.QtCore import QDate
+from PyQt5.QtCore import QDateTime, QDate, QTime
 from db import get_connection
 from logger import logger
 
@@ -290,20 +290,18 @@ class ScheduleDialog(QDialog):
             if idx >= 0:
                 self.class_type_box.setCurrentIndex(idx)
 
-        self.start_time = QDateEdit()
+        self.start_time = QDateTimeEdit()
         self.start_time.setCalendarPopup(True)
+        self.start_time.setDisplayFormat("yyyy-MM-dd HH:mm:ss")
         self.start_time.setDate(
-            QDate.fromString(str(start_time), "yyyy-MM-dd")
-            if start_time
-            else QDate.currentDate()
+            QDate.fromString(str(start_time), "yyyy-MM-dd") if start_time else QDate.currentDate()
         )
 
-        self.end_time = QDateEdit()
+        self.end_time = QDateTimeEdit()
         self.end_time.setCalendarPopup(True)
+        self.end_time.setDisplayFormat("yyyy-MM-dd HH:mm:ss")
         self.end_time.setDate(
-            QDate.fromString(str(end_time), "yyyy-MM-dd")
-            if end_time
-            else QDate.currentDate()
+            QDate.fromString(str(end_time), "yyyy-MM-dd") if end_time else QDate.currentDate()
         )
 
         layout.addRow("Аудитория:", self.audience_box)
@@ -377,7 +375,7 @@ class ScheduleDialog(QDialog):
             self.teacher_box.currentData(),
             self.group_box.currentData(),
             self.discipline_box.currentData(),
-            self.start_time.date().toString("yyyy-MM-dd"),
-            self.end_time.date().toString("yyyy-MM-dd"),
+            self.start_time.text(),
+            self.end_time.text(),
             self.class_type_box.currentText(),
         )

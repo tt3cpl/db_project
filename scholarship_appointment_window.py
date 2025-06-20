@@ -64,13 +64,13 @@ class ScholarshipAppointmentWindow(QWidget):
             cur = conn.cursor()
             cur.execute(
                 """
-                SELECT sa."ID_scholarship_assignment", sa."Assignment_date", sa."End_date", sa."Base",
+                SELECT sa."ID_scholarship_assignment", sa."from", sa."by", sa."Base",
                        sa."ID_student", s."Surname", s."Name",
                        sa."ID_scholarships", sch."Type_of_scholarship", sch."Size"
                 FROM public."Scholarship_Appointment" sa
                 JOIN public."Student" s ON sa."ID_student" = s."ID_student"
                 JOIN public."Scholarship" sch ON sa."ID_scholarships" = sch."ID_scholarships"
-                ORDER BY sa."Assignment_date" DESC
+                ORDER BY sa."from" DESC
             """
             )
             rows = cur.fetchall()
@@ -107,14 +107,14 @@ class ScholarshipAppointmentWindow(QWidget):
             cur = conn.cursor()
             cur.execute(
                 """
-                SELECT sa."ID_scholarship_assignment", sa."Assignment_date", sa."End_date", sa."Base",
+                SELECT sa."ID_scholarship_assignment", sa."from", sa."by", sa."Base",
                        sa."ID_student", s."Surname", s."Name",
                        sa."ID_scholarships", sch."Type_of_scholarship", sch."Size"
                 FROM public."Scholarship_Appointment" sa
                 JOIN public."Student" s ON sa."ID_student" = s."ID_student"
                 JOIN public."Scholarship" sch ON sa."ID_scholarships" = sch."ID_scholarships"
                 WHERE s."Surname" ILIKE %s OR s."Name" ILIKE %s OR sch."Type_of_scholarship" ILIKE %s
-                ORDER BY sa."Assignment_date" DESC
+                ORDER BY sa."from" DESC
             """,
                 (f"%{keyword}%", f"%{keyword}%", f"%{keyword}%"),
             )
@@ -140,7 +140,7 @@ class ScholarshipAppointmentWindow(QWidget):
                 cur.execute(
                     """
                     INSERT INTO public."Scholarship_Appointment"
-                    ("End_date", "ID_student", "Assignment_date", "Base", "ID_scholarships")
+                    ("by", "ID_student", "from", "Base", "ID_scholarships")
                     VALUES (%s, %s, %s, %s, %s)
                 """,
                     data,
@@ -167,7 +167,7 @@ class ScholarshipAppointmentWindow(QWidget):
             cur = conn.cursor()
             cur.execute(
                 """
-                SELECT "End_date", "ID_student", "Assignment_date", "Base", "ID_scholarships"
+                SELECT "by", "ID_student", "from", "Base", "ID_scholarships"
                 FROM public."Scholarship_Appointment"
                 WHERE "ID_scholarship_assignment" = %s
             """,
@@ -195,7 +195,7 @@ class ScholarshipAppointmentWindow(QWidget):
                 cur.execute(
                     """
                     UPDATE public."Scholarship_Appointment"
-                    SET "End_date" = %s, "ID_student" = %s, "Assignment_date" = %s, "Base" = %s, "ID_scholarships" = %s
+                    SET "by" = %s, "ID_student" = %s, "from" = %s, "Base" = %s, "ID_scholarships" = %s
                     WHERE "ID_scholarship_assignment" = %s
                 """,
                     (*data, record_id),

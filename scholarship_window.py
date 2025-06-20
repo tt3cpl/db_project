@@ -223,4 +223,4 @@ class ScholarshipDialog(QDialog):
         layout.addWidget(buttons)
 
     def get_data(self):
-        return (self.type_combo.currentText(), int(self.size_input.text()))
+        return (self.type_combo.currentText(), float(self.size_input.text()))

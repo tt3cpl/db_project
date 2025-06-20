@@ -10,10 +10,10 @@ from PyQt5.QtWidgets import (
     QDialog,
     QFormLayout,
     QDialogButtonBox,
-    QDateEdit,
+    QDateTimeEdit,
     QComboBox,
 )
-from PyQt5.QtCore import QDate
+from PyQt5.QtCore import QDateTime, QDate, QTime
 from db import get_connection
 from logger import logger
 
@@ -65,7 +65,7 @@ class SessionScheduleWindow(QWidget):
             cur = conn.cursor()
             cur.execute(
                 """
-                SELECT ss."ID_session_schedules", ss."from", ss."by",
+                SELECT ss."ID_session_schedules", ss."Start_time",
                        ss."ID_audience", a."Audience_number", a."Type",
                        ss."ID_disciplines", d."Discipline_name",
                        ss."ID_groups", g."Group_numbers"
@@ -73,17 +73,16 @@ class SessionScheduleWindow(QWidget):
                 JOIN public."Audience" a ON ss."ID_audience" = a."ID_audience"
                 JOIN public."Discipline" d ON ss."ID_disciplines" = d."ID_disciplines"
                 JOIN public."Group" g ON ss."ID_groups" = g."ID_group"
-                ORDER BY ss."from"
+                ORDER BY ss."Start_time"
             """
             )
             rows = cur.fetchall()
             self.table.setRowCount(len(rows))
-            self.table.setColumnCount(10)
+            self.table.setColumnCount(9)
             self.table.setHorizontalHeaderLabels(
                 [
                     "ID расписания",
-                    "Дата начала",
-                    "Дата окончания",
+                    "Дата и время начала",
                     "ID аудитории",
                     "Номер аудитории",
                     "Тип аудитории",
@@ -110,7 +109,7 @@ class SessionScheduleWindow(QWidget):
             cur = conn.cursor()
             cur.execute(
                 """
-                SELECT ss."ID_session_schedules", ss."from", ss."by",
+                SELECT ss."ID_session_schedules", ss."Start_time",
                        ss."ID_audience", a."Audience_number", a."Type",
                        ss."ID_disciplines", d."Discipline_name",
                        ss."ID_groups", g."Group_numbers"
@@ -119,7 +118,7 @@ class SessionScheduleWindow(QWidget):
                 JOIN public."Discipline" d ON ss."ID_disciplines" = d."ID_disciplines"
                 JOIN public."Group" g ON ss."ID_groups" = g."ID_group"
                 WHERE CAST(a."Audience_number" AS TEXT) ILIKE %s OR d."Discipline_name" ILIKE %s
-                ORDER BY ss."from"
+                ORDER BY ss."Start_time"
             """,
                 (f"%{keyword}%", f"%{keyword}%"),
             )
@@ -145,8 +144,8 @@ class SessionScheduleWindow(QWidget):
                 cur.execute(
                     """
                     INSERT INTO public."Session_schedule"
-                    ("ID_audience", "ID_disciplines", "ID_groups", "from", "by")
-                    VALUES (%s, %s, %s, %s, %s)
+                    ("ID_audience", "ID_disciplines", "ID_groups", "Start_time")
+                    VALUES (%s, %s, %s, %s)
                 """,
                     data,
                 )
@@ -172,7 +171,7 @@ class SessionScheduleWindow(QWidget):
             cur = conn.cursor()
             cur.execute(
                 """
-                SELECT "ID_audience", "ID_disciplines", "ID_groups", "from", "by"
+                SELECT "ID_audience", "ID_disciplines", "ID_groups", "Start_time"
                 FROM public."Session_schedule" WHERE "ID_session_schedules" = %s
             """,
                 (record_id,),
@@ -199,7 +198,7 @@ class SessionScheduleWindow(QWidget):
                 cur.execute(
                     """
                     UPDATE public."Session_schedule"
-                    SET "ID_audience" = %s, "ID_disciplines" = %s, "ID_groups" = %s, "from" = %s, "by" = %s
+                    SET "ID_audience" = %s, "ID_disciplines" = %s, "ID_groups" = %s, "Start_time" = %s
                     WHERE "ID_session_schedules" = %s
                 """,
                     (*data, record_id),
@@ -250,8 +249,7 @@ class SessionScheduleDialog(QDialog):
         audience_id=None,
         discipline_id=None,
         group_id=None,
-        from_date=None,
-        by_date=None,
+        start=None,
         editing=False,
     ):
         super().__init__()
@@ -267,25 +265,17 @@ class SessionScheduleDialog(QDialog):
         self.group_box = QComboBox()
         self.load_groups(group_id)
 
-        self.from_date = QDateEdit()
-        self.from_date.setCalendarPopup(True)
-        if from_date:
-            self.from_date.setDate(QDate.fromString(str(from_date), "yyyy-MM-dd"))
-        else:
-            self.from_date.setDate(QDate.currentDate())
-
-        self.by_date = QDateEdit()
-        self.by_date.setCalendarPopup(True)
-        if by_date:
-            self.by_date.setDate(QDate.fromString(str(by_date), "yyyy-MM-dd"))
-        else:
-            self.by_date.setDate(QDate.currentDate())
+        self.start = QDateTimeEdit()
+        self.start.setCalendarPopup(True)
+        self.start.setDisplayFormat("yyyy-MM-dd HH:mm:ss")
+        self.start.setDate(
+            QDate.fromString(str(start), "yyyy-MM-dd") if start else QDate.currentDate()
+        )
 
         layout.addRow("Аудитория:", self.audience_box)
         layout.addRow("Дисциплина:", self.discipline_box)
         layout.addRow("Группа:", self.group_box)
-        layout.addRow("Дата начала:", self.from_date)
-        layout.addRow("Дата окончания:", self.by_date)
+        layout.addRow("Дата и время начала:", self.start)
 
         buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         buttons.accepted.connect(self.accept)
@@ -362,9 +352,8 @@ class SessionScheduleDialog(QDialog):
             logger.error(f"Ошибка загрузки групп: {e}")
 
     def get_data(self):
-        from_date_str = self.from_date.date().toString("yyyy-MM-dd")
-        by_date_str = self.by_date.date().toString("yyyy-MM-dd")
+        from_date_str = self.start.text()
         audience_id = self.audience_box.currentData()
         discipline_id = self.discipline_box.currentData()
         group_id = self.group_box.currentData()
-        return (audience_id, discipline_id, group_id, from_date_str, by_date_str)
+        return (audience_id, discipline_id, group_id, from_date_str)

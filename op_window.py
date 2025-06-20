@@ -246,5 +246,5 @@ class OPDialog(QDialog):
             self.division_map[self.division_combo.currentText()],
             self.op_name.text(),
             self.impl_format.currentText(),
-            int(self.hours.text()),
+            float(self.hours.text()),
         )

@@ -63,7 +63,7 @@ class AudienceWindow(QWidget):
             self.table.setRowCount(len(rows))
             self.table.setColumnCount(5)
             self.table.setHorizontalHeaderLabels(
-                ["ID", "Тип", "Статус", "Номер аудитории", "Адрес"]
+                ["ID", "Тип", "Статус", "Адрес", "Номер аудитории"]
             )
             for i, row in enumerate(rows):
                 for j, val in enumerate(row):
@@ -195,7 +195,7 @@ class AudienceDialog(QDialog):
     ]
     STATUS_OPTIONS = ["В ремонте", "Активная", "Забронирована под мероприятие"]
 
-    def __init__(self, type_="", status="", number="", address=""):
+    def __init__(self, type_="", status="", address="", number=""):
         super().__init__()
         self.setWindowTitle("Данные аудитории")
         layout = QFormLayout(self)
@@ -219,8 +219,8 @@ class AudienceDialog(QDialog):
 
         layout.addRow("Тип:", self.type_combo)
         layout.addRow("Статус:", self.status_combo)
-        layout.addRow("Номер аудитории:", self.number_input)
         layout.addRow("Адрес:", self.address_input)
+        layout.addRow("Номер аудитории:", self.number_input)
 
         buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         buttons.accepted.connect(self.accept)
@@ -231,6 +231,6 @@ class AudienceDialog(QDialog):
         return (
             self.type_combo.currentText(),
             self.status_combo.currentText(),
-            int(self.number_input.text()),
+            self.number_input.text(),
             self.address_input.text(),
         )

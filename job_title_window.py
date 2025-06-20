@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import (
     QPushButton,
     QTableWidget,
     QTableWidgetItem,
+    QComboBox,
     QLineEdit,
     QHBoxLayout,
     QMessageBox,
@@ -191,6 +192,8 @@ class JobTitleWindow(QWidget):
 
 
 class JobTitleDialog(QDialog):
+    BETS_OPTIONS = ["0.25", "0.5", "0.75", "1.0"]
+
     def __init__(self, salary="", title="", bets=""):
         super().__init__()
         self.setWindowTitle("Данные должности")
@@ -198,11 +201,17 @@ class JobTitleDialog(QDialog):
 
         self.salary_input = QLineEdit(salary)
         self.title_input = QLineEdit(title)
-        self.bets_input = QLineEdit(bets)
+
+        self.bets_combo = QComboBox()
+        self.bets_combo.addItems(self.BETS_OPTIONS)
+        if bets in self.BETS_OPTIONS:
+            self.bets_combo.setCurrentText(bets)
+        else:
+            self.bets_combo.setCurrentIndex(0)
 
         layout.addRow("Зарплата:", self.salary_input)
         layout.addRow("Название должности:", self.title_input)
-        layout.addRow("Количество ставок:", self.bets_input)
+        layout.addRow("Количество ставок:", self.bets_combo)
 
         buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         buttons.accepted.connect(self.accept)
@@ -211,7 +220,7 @@ class JobTitleDialog(QDialog):
 
     def get_data(self):
         return (
-            int(self.salary_input.text()),
+            float(self.salary_input.text()),
             self.title_input.text(),
-            int(self.bets_input.text()),
+            float(self.bets_combo.currentText()),
         )

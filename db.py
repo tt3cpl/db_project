@@ -1,11 +1,10 @@
-import psycopg2
-from psycopg2 import sql
+from psycopg2 import connect
 from logger import logger
 
 DB_PARAMS = {
-    "dbname": "postgres",
+    "dbname": "session",
     "user": "postgres",
-    "password": "Goshapes12!",
+    "password": "1212",
     "host": "localhost",
     "port": 5432,
 }
@@ -13,7 +12,7 @@ DB_PARAMS = {
 
 def get_connection():
     try:
-        conn = psycopg2.connect(**DB_PARAMS)
+        conn = connect(**DB_PARAMS)
         logger.info("Подключение к базе данных успешно")
         return conn
     except Exception as e:
